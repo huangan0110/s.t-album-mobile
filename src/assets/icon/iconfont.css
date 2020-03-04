@@ -1,0 +1,141 @@
+@font-face {font-family: "iconfont";
+  src: url('./iconfont.ttf'); /* IE9 */
+  src: url('./iconfont.ttf') format('embedded-opentype'), /* IE6-IE8 */
+  url('./iconfont.ttf') format('woff2'),
+  url('./iconfont.ttf') format('woff'),
+  url('./iconfont.ttf') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+ */
+  url('./iconfont.ttf') format('svg'); /* iOS 4.1- */
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.album11qq:before {
+  content: "\e64d";
+}
+
+.albumqq:before {
+  content: "\e64c";
+}
+
+.albumtixing:before {
+  content: "\e61a";
+}
+
+.albumqq1:before {
+  content: "\e631";
+}
+
+.albumweibo:before {
+  content: "\e657";
+}
+
+.albumqq2:before {
+  content: "\e65e";
+}
+
+.albumweixin:before {
+  content: "\e64e";
+}
+
+.albumweibo1:before {
+  content: "\e630";
+}
+
+.albumweixin1:before {
+  content: "\e632";
+}
+
+.albumwo:before {
+  content: "\e62a";
+}
+
+.albumweibo2:before {
+  content: "\e62d";
+}
+
+.albumtianjia:before {
+  content: "\e634";
+}
+
+.albumwo1:before {
+  content: "\e611";
+}
+
+.albumshouye:before {
+  content: "\e602";
+}
+
+.albumtixing1:before {
+  content: "\e679";
+}
+
+.albumweixin2:before {
+  content: "\e60b";
+}
+
+.albumsousuo:before {
+  content: "\e63f";
+}
+
+.albumwo2:before {
+  content: "\e633";
+}
+
+.albumsousuo1:before {
+  content: "\e609";
+}
+
+.albumsousuo2:before {
+  content: "\e60c";
+}
+
+.albumtixing2:before {
+  content: "\e658";
+}
+
+.albumshouye1:before {
+  content: "\e628";
+}
+
+.albumsousuo3:before {
+  content: "\e613";
+}
+
+.albumtixing3:before {
+  content: "\e6db";
+}
+
+.albumshouye2:before {
+  content: "\e608";
+}
+
+.albumsousuo4:before {
+  content: "\e60d";
+}
+
+.albumtixing4:before {
+  content: "\e627";
+}
+
+.albumweibo3:before {
+  content: "\e625";
+}
+
+.albumweixin3:before {
+  content: "\e626";
+}
+
+.album-:before {
+  content: "\e61f";
+}
+
+.albumicon-test:before {
+  content: "\e624";
+}
+
