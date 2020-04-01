@@ -29,20 +29,6 @@
                 ></i>
             </li>
         </ul>
-        <van-popup
-            v-model="showAddPop"
-            round
-            :overlay="false"
-            closeable
-            position="bottom"
-            :style="{ height: '40%',marginBottom:'50px' }"
-            :get-container="getContainer"
-        >
-            <div class="picup">
-                <van-uploader v-model="fileList" multiple :max-count="9" :after-read="afterRead" />
-            </div>
-            <van-button @click="uploadPic">上传</van-button>
-        </van-popup>
     </div>
 </template>
 

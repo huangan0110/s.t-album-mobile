@@ -54,7 +54,7 @@ export default {
                     viewNum: 23,
                     commentNum: 3,
                     username: "mirsan",
-                    attention: true,
+                    attention: false,
                     time: "一天前",
                     avatarSrc: require("../../assets/img/固定图1.jpg")
                 },

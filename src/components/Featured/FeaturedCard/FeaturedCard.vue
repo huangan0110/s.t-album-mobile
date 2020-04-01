@@ -24,7 +24,7 @@
             <div class="info">
                 <span>by {{userName}}</span> ●
                 <span>{{time}}</span> ●
-                <span v-show="!showAttention">+关注</span>
+                <span v-show="!showAttention" style="color: #409EFF">+关注</span>
                 <span v-show="showAttention">已关注</span>
             </div>
             <div class="head">

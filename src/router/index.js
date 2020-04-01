@@ -12,6 +12,10 @@ import AlbumDetail from "../components/Home1/AlbumDetail/AlbumDetail";
 import EditAlbum from "../components/Home1/AlbumDetail/EditAlbum";
 import MovePhoto from "../components/Home1/AlbumDetail/MovePhoto";
 import UpLoad from "../components/UpLoad/UpLoad";
+import EditInfo from "../components/Mine/EditInfo";
+import ChnagePass from "../components/Mine/ChnagePass";
+import ChangeBg from "../components/Mine/ChangeBg";
+import ViewLevel from "../components/Mine/ViewLevel";
 
 
 Vue.use(Router)
@@ -55,7 +59,7 @@ export default new Router({
             name: 'UpLoad',
             component: UpLoad,
             meta: {
-                showTabbar: true,
+                showTabbar: false,
             }
         },
         {
@@ -120,6 +124,38 @@ export default new Router({
             component: Mine,
             meta: {
                 showTabbar: true,
+            }
+        },
+        {
+            path: '/edit_info',
+            name: 'EditInfo',
+            component: EditInfo,
+            meta: {
+                showTabbar: false,
+            }
+        },
+        {
+            path: '/change_pass',
+            name: 'ChnagePass',
+            component: ChnagePass,
+            meta: {
+                showTabbar: false,
+            }
+        },
+        {
+            path: '/change_bg',
+            name: 'ChnageBg',
+            component: ChangeBg,
+            meta: {
+                showTabbar: false,
+            }
+        },
+        {
+            path: '/view_level',
+            name: 'ViewLevel',
+            component: ViewLevel,
+            meta: {
+                showTabbar: false,
             }
         },
     ]
