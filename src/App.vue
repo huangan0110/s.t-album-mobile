@@ -14,7 +14,7 @@ export default {
         Tabbar
     },
     created() {
-        if(localStorage.getItem('gbIndex==null')) {
+        if(localStorage.getItem('gbIndex')==null) {
             localStorage.setItem('bgIndex','0');
         }
     }
