@@ -1,7 +1,7 @@
 <template>
     <div id="app">
         <router-view />
-        
+
         <Tabbar v-show="this.$route.meta.showTabbar"></Tabbar>
     </div>
 </template>
@@ -12,6 +12,11 @@ export default {
     name: "App",
     components: {
         Tabbar
+    },
+    created() {
+        if(localStorage.getItem('gbIndex==null')) {
+            localStorage.setItem('bgIndex','0');
+        }
     }
 };
 </script>
