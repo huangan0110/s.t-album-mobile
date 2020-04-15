@@ -1,10 +1,12 @@
 <template>
     <div class="mine">
-        <div class="mine-bg">
-            <img :src="mineBgSrc" alt="" class="user-bg">
-            <div class="mine-header">
-                <i class="van-icon van-icon-arrow-left"></i>
-                <i class="van-icon van-icon-ellipsis" @click="showOptionPup"></i>
+        <div class="mine-bg" v-show="contentScrollTop">
+            <img :src="mineBgSrc" alt="" class="user-bg" :class="{'bg-scroll':isFixed}">
+            <div class="mine-header" :class="{'mine-header-scroll':isFixed}">
+                <i class="van-icon van-icon-arrow-left back-i" @click="back"></i>
+                <img src="../../assets/img/固定图2.jpg" alt="" v-show="isFixed">
+                <i class="van-icon van-icon-ellipsis pup-i" @click="showOptionPup"></i>
+                <span v-show="isFixed">用户名用户名</span>
             </div>
             <div class="avartar-editinfo">
                 <div class="avatar">
@@ -22,15 +24,15 @@
             </div>
         </div>
         <div class="mine-content">
-            <van-tabs v-model="active" animated title-active-color="#008B45">
+            <van-tabs v-model="active" animated title-active-color="#008B45" sticky swipeable @change="test()" offset-top="60">
                 <van-tab title="相册">
                     相册
                 </van-tab>
                 <van-tab title="精选">
-                    精选
+                    <MineFeatured></MineFeatured>
                 </van-tab>
                 <van-tab title="关注">
-                    关注
+                    <Attention></Attention>
                 </van-tab>
                 <van-tab title="粉丝">
                     粉丝
@@ -40,7 +42,7 @@
         <div class="van-overlay" style="background-color:rgba(0,0,0,0);z-index: 998" @click="showOption=false" v-if="showOption">
 
         </div>
-        <div class="option-pup-hide" :class="{'active':showOption }" style="z-index: 999">
+        <div class="option-pup-hide" :class="{'active':showOption }" style="z-index: 1009">
             <div class="option-cell" :class="{'active-cell':showOption}" @click="$router.push('/change_bg')">
                 更改背景
             </div>
@@ -52,15 +54,61 @@
 </template>
 
 <script>
+import MineFeatured from "./components/MineFeatured";
+import Attention from "./components/Attention";
+var el = document.getElementsByClassName('van-tabs__wrap')[0];
+
+var contentEl = document.getElementsByClassName('van-tabs__content--animated')[0];
 export default {
+    components:{
+        MineFeatured,
+        Attention
+    },
     data() {
         return {
             showOption:false,
             active:'',
-            mineBgSrc:require("../../assets/bg/bg"+localStorage.getItem('bgIndex')+".jpg")
+            mineBgSrc:require("../../assets/bg/bg"+localStorage.getItem('bgIndex')+".jpg"),
+            contentScrollTop:true,
+            isFixed:false
         }
     },
+    beforeCreate() {
+        document.querySelector("body").setAttribute("style", "background:#eee");
+    },
+    beforeDestroy() {
+        document.querySelector("body").setAttribute("style", "background:#fff");
+    },
+    mounted() {
+        window.addEventListener('scroll',this.getScrollTop);
+    },
     methods: {
+        test(scrollTop) {
+            console.log("12");
+            window.scrollTo(100,500)
+        },
+        getScrollTop() {
+            this.showOption = false;
+            var bgEl = document.getElementsByClassName('user-bg')[0];
+            var userInfoEl = document.getElementsByClassName('user-info')[0];
+            var avatarEl = document.getElementsByClassName('avatar')[0];
+            var scrollTop = document.body.scrollTop || document.documentElement.scrollTop;
+            bgEl.setAttribute("style","filter:brightness("+(320-scrollTop)/533+")");
+            avatarEl.setAttribute("style","filter:brightness("+(280-scrollTop)/280+")");
+            userInfoEl.setAttribute("style","opacity:"+(320-scrollTop)/320)
+            if(scrollTop >220) {
+                // el.setAttribute("style","position:fixed;width:100%;top:0;margin-bottom:48px;z-index:999;");
+                // contentEl.setAttribute("style","margin-top:48px");
+                bgEl.setAttribute("style","filter:brightness(0.21)");
+                this.isFixed = true;
+
+            }else{
+                // el.setAttribute("style","");
+                // contentEl.setAttribute("style","");
+                this.isFixed = false
+            }
+        },
+        back() {},
         editInfo() {
             this.$router.push('/edit_info')
         },
@@ -77,6 +125,9 @@ export default {
 </script>
 
 <style scoped lang="scss">
+    >>>.van-overlay {
+        z-index: 1005!important;
+    }
 .mine {
     position: relative;
     .mine-bg {
@@ -85,14 +136,26 @@ export default {
         height: 300px;
         .user-bg {
             width: 100%;
-            height: 100%;
+            height: 300px;
             object-fit: cover;
             filter: brightness(60%);
         }
-        .mine-header {
-            height: 40px;
+        .bg-scroll {
             width: 100%;
-            position: absolute;
+            height: 300px;
+            position: fixed;
+            top: -240px;
+            z-index: 1000;
+            filter: brightness(21%);
+        }
+        .mine-header-scroll {
+            z-index: 1001!important;
+        }
+        .mine-header {
+            height: 60px;
+            width: 100%;
+            position: fixed;
+            z-index: 99;
             top: 0;
             i {
                 font-size: 20px;
@@ -100,11 +163,26 @@ export default {
                 position: absolute;
                 top: 24px;
             }
-            i:first-child {
+            .back-i {
                 left: 16px;
             }
-            i:last-child {
+            .pup-i {
                 right: 16px;
+            }
+            img {
+                width: 35px;
+                height: 35px;
+                border-radius: 50%;
+                top: 15px;
+                left: 55px;
+                position: absolute;
+            }
+            span {
+                position: absolute;
+                left: 107px;
+                top: 22px;
+                font-size: 14px;
+                color: #ffffff;
             }
         }
         .avartar-editinfo {
@@ -112,6 +190,9 @@ export default {
             width: 100%;
             height: 80px;
             top: 70px;
+            .bg-scroll {
+                position: fixed;
+            }
             .avatar {
                 height: 80px;
                 width: 80px;

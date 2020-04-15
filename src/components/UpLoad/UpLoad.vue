@@ -145,12 +145,7 @@
                 }
             },
         },
-        // beforeCreate() {
-        //     document.querySelector("body").setAttribute("style", "background:#eee");
-        // },
-        // beforeDestroy() {
-        //     document.querySelector("body").setAttribute("style", "background:#fff");
-        // },
+
     }
 </script>
 
