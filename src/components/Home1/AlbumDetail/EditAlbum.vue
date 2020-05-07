@@ -2,14 +2,14 @@
     <div class="edit-album">
         <div class="edit-header">
             <div class="back-btn" @click="back">
-                <i class="van-icon van-icon-arrow-left"></i> <span>取消</span>
+                <i class="iconfont albumzuojiantou"></i>
             </div>
             <span class="edit-title" v-if="this.type == 'edit'">编辑相册</span>
             <span class="edit-title" v-if="this.type == 'add'">新增相册</span>
             <span class="edit-save" @click="saveEdit" v-if="this.type == 'edit'">保存</span>
         </div>
         <div class="edit-content">
-            <van-field v-model="title" placeholder="标题"/>
+            <van-field v-model="title" label="标题"  placeholder="标题"/>
             <div class="item">
                 <span>权限</span>
                 <div class="vanmenu">
@@ -22,7 +22,7 @@
         </div>
         <div class="del-btn">
             <van-button plain hairline type="danger" @click="delAlbum" v-if="this.type == 'edit'">删除</van-button>
-            <van-button plain hairline type="danger" @click="delAlbum" v-if="this.type == 'add'">保存</van-button>
+            <van-button plain hairline type="info" @click="delAlbum" v-if="this.type == 'add'">保存</van-button>
         </div>
     </div>
 </template>
@@ -69,16 +69,14 @@
         .edit-header {
             height: 50px;
             width: 100%;
-            background-color: pink;
             position: relative;
             text-align: center;
-
+            /*border-bottom: 0.5px solid #eee;*/
             .back-btn {
                 width: 100px;
                 height: 50px;
-                font-size: 18px;
-
-                i, span {
+                i {
+                    font-size: 26px;
                     position: absolute;
                     top: 50%;
                     transform: translateY(-50%);
@@ -96,7 +94,7 @@
 
             .edit-title {
                 position: absolute;
-                font-size: 18px;
+                font-size: 16px;
                 left: 50%;
                 transform: translateX(-50%);
                 top: 12px;
@@ -114,20 +112,27 @@
                 padding: 13px 16px;
             }
             >>>input::-webkit-input-placeholder {
-                font-size: 16px;
+                font-size: 14px;
             }
             .item {
                 height: 50px;
                 width: 100%;
                 position: relative;
                 border-bottom: 0.6px solid #ebedf0;
+                font-size: 14px;
+                color: #323233;
 
                 >>>.van-hairline--top-bottom::after, .van-hairline-unset--top-bottom::after {
                     border: none;
                 }
+                >>>.van-dropdown-menu__title {
+                    font-size: 14px;
+                    color: #323233;
+
+                }
                 span {
                     position: absolute;
-                    left: 15px;
+                    left: 17px;
                     top: 50%;
                     transform: translateY(-50%);
                 }

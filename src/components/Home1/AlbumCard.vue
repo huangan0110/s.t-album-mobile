@@ -44,6 +44,7 @@
         width: 100%;
         height: 47vw;
         object-fit: cover;
+        border-radius: 5px;
     }
     span:last-child {
         float: right;

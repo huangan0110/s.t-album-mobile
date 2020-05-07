@@ -2,7 +2,7 @@
     <div class="edit-info">
         <div class="edit-header">
             <div class="back-btn" @click="back">
-                <i class="van-icon van-icon-arrow-left"></i> <span>取消</span>
+                <i class="iconfont albumzuojiantou"></i>
             </div>
             <span class="edit-title" >编辑信息</span>
             <span class="edit-save" @click="saveEdit">保存</span>
@@ -144,16 +144,17 @@
     .edit-header {
         height: 50px;
         width: 100%;
-        background-color: pink;
         position: relative;
+        background-color: #fff;
         text-align: center;
+        border-bottom: 0.5px solid #eee;
 
         .back-btn {
             width: 100px;
             height: 50px;
-            font-size: 18px;
 
-            i, span {
+            i {
+                font-size: 26px;
                 position: absolute;
                 top: 50%;
                 transform: translateY(-50%);
@@ -171,7 +172,7 @@
 
         .edit-title {
             position: absolute;
-            font-size: 18px;
+            font-size: 16px;
             left: 50%;
             transform: translateX(-50%);
             top: 12px;
@@ -179,9 +180,9 @@
 
         .edit-save {
             position: absolute;
-            font-size: 18px;
+            font-size: 16px;
             right: 16px;
-            top: 12px;
+            top: 14px;
         }
     }
     .edit-content {

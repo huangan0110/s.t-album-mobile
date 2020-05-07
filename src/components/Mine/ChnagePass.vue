@@ -2,7 +2,7 @@
     <div class="change-pass">
         <div class="edit-header">
             <div class="back-btn" @click="back">
-                <i class="van-icon van-icon-arrow-left"></i> <span>取消</span>
+                <i class="iconfont albumzuojiantou"></i>
             </div>
             <span class="edit-title" >修改密码</span>
 <!--            <span class="edit-save" @click="saveEdit">保存</span>-->
@@ -37,19 +37,19 @@
 
 <style scoped lang="scss">
 .change-pass {
+    color: #555;
     .edit-header {
         height: 50px;
         width: 100%;
-        background-color: pink;
         position: relative;
         text-align: center;
 
         .back-btn {
             width: 100px;
             height: 50px;
-            font-size: 18px;
 
-            i, span {
+            i {
+                font-size: 26px;
                 position: absolute;
                 top: 50%;
                 transform: translateY(-50%);
@@ -58,16 +58,11 @@
             i {
                 left: 12px;
             }
-
-            span {
-                left: 35px;
-            }
-
         }
 
         .edit-title {
             position: absolute;
-            font-size: 18px;
+            font-size: 16px;
             left: 50%;
             transform: translateX(-50%);
             top: 12px;

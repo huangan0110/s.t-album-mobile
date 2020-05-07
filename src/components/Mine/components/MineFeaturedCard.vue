@@ -1,7 +1,7 @@
 <template>
     <div class="mine-featured-card">
         <div class="header">
-            <img src="../../../assets/img/固定图5.jpg" alt="">
+            <img src="../../../assets/img/fixed5.jpg" alt="">
             <span class="user-name">用户名用户名几个字？</span>
             <span class="up-time">10天前</span>
 <!--            <i class="van-icon van-icon-arrow-down option-btn" @click="showMore"></i>-->
@@ -44,47 +44,47 @@
                 recData: [
                     {
                         title: "假装在法国",
-                        imgSrc: require("../../../assets/img/固定图4.jpg"),
+                        imgSrc: require("../../../assets/img/fixed4.jpg"),
                         like: true,
                         viewNum: 23,
                         commentNum: 3,
                         username: "mirsan",
                         attention: false,
                         time: "一天前",
-                        avatarSrc: require("../../../assets/img/固定图1.jpg")
+                        avatarSrc: require("../../../assets/img/fixed1.jpg")
                     },
                     {
                         title: "假装在法国",
-                        imgSrc: require("../../../assets/img/固定图4.jpg"),
+                        imgSrc: require("../../../assets/img/fixed4.jpg"),
                         like: true,
                         viewNum: 23,
                         commentNum: 3,
                         username: "mirsan",
                         attention: true,
                         time: "一天前",
-                        avatarSrc: require("../../../assets/img/固定图1.jpg")
+                        avatarSrc: require("../../../assets/img/fixed1.jpg")
                     },
                     {
                         title: "假装在法国",
-                        imgSrc: require("../../../assets/img/固定图4.jpg"),
+                        imgSrc: require("../../../assets/img/fixed4.jpg"),
                         like: true,
                         viewNum: 23,
                         commentNum: 3,
                         username: "mirsan",
                         attention: true,
                         time: "一天前",
-                        avatarSrc: require("../../../assets/img/固定图1.jpg")
+                        avatarSrc: require("../../../assets/img/fixed1.jpg")
                     },
                     {
                         title: "假装在法国",
-                        imgSrc: require("../../../assets/img/固定图4.jpg"),
+                        imgSrc: require("../../../assets/img/fixed4.jpg"),
                         like: true,
                         viewNum: 23,
                         commentNum: 3,
                         username: "mirsan",
                         attention: true,
                         time: "一天前",
-                        avatarSrc: require("../../../assets/img/固定图1.jpg")
+                        avatarSrc: require("../../../assets/img/fixed1.jpg")
                     }
                 ]
             }

@@ -1,5 +1,6 @@
 <template>
     <div class="attention">
+        <span class="count">全部关注(6)</span>
         <AttentionCell></AttentionCell>
         <AttentionCell></AttentionCell>
         <AttentionCell></AttentionCell>
@@ -24,6 +25,10 @@
 
 <style scoped lang="scss">
 .attention {
-
+    .count {
+        margin-left: 20px;
+        font-size: 12px;
+        color: #666;
+    }
 }
 </style>

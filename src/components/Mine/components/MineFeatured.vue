@@ -1,24 +1,24 @@
 <template>
     <div class="mine-featured">
         <span class="count">全部动态(2)</span>
-        <MineFeaturedCard></MineFeaturedCard>
-        <MineFeaturedCard></MineFeaturedCard>
-        <MineFeaturedCard></MineFeaturedCard>
-        <MineFeaturedCard></MineFeaturedCard>
-        <MineFeaturedCard></MineFeaturedCard>
-        <MineFeaturedCard></MineFeaturedCard>
-        <MineFeaturedCard></MineFeaturedCard>
-        <MineFeaturedCard></MineFeaturedCard>
-        <MineFeaturedCard></MineFeaturedCard>
-        <MineFeaturedCard></MineFeaturedCard>
+        <FeaturedCard></FeaturedCard>
+        <FeaturedCard></FeaturedCard>
+        <FeaturedCard></FeaturedCard>
+        <FeaturedCard></FeaturedCard>
+        <FeaturedCard></FeaturedCard>
+        <FeaturedCard></FeaturedCard>
+        <FeaturedCard></FeaturedCard>
+        <FeaturedCard></FeaturedCard>
+        <FeaturedCard></FeaturedCard>
+        <FeaturedCard></FeaturedCard>
     </div>
 </template>
 
 <script>
-    import MineFeaturedCard from "./MineFeaturedCard";
+    import FeaturedCard from "../../Common/FeaturedCard";
     export default {
         components:{
-            MineFeaturedCard
+            FeaturedCard
         },
         name: "Featured"
     }

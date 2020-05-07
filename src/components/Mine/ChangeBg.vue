@@ -5,7 +5,7 @@
             <span>个人主页背景</span>
         </div>
         <div class="bg-header"></div>
-        <div class="change-bg-content">
+        <div class="change-bg-content clearfix">
             <span style="font-size:12px;color:#666;">推荐背景</span>
             <ul>
                 <li v-for="(item,index) in bgData" :key="index">
@@ -66,7 +66,7 @@
         border-bottom: 0.5px solid #eee;
         position: fixed;
         top: 0;
-        line-height: 50px;
+        line-height: 52px;
         color: #666;
         z-index: 999;
         background-color: #fff;
@@ -86,6 +86,7 @@
         height: 50px;
     }
     .change-bg-content {
+        background-color: #eee;
         padding: 15px;
         ul {
             list-style: none;
@@ -125,6 +126,19 @@
                 float: right;
             }
         }
+    }
+    .clearfix:before,
+    .clearfix:after {
+        content: "";
+        /* 触发BFC, 防止外边距合并 */
+        display: table;
+    }
+    .clearfix:after {
+        clear: both;
+    }
+    .clearfix {
+        /* *代表    ie 6 7 能识别的符号  带*的属性，只有IE67执行   zoom代表ie67清除浮动的方法 */
+        *zoom: 1;
     }
 }
 </style>

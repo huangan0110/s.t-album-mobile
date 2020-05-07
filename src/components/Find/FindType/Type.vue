@@ -34,124 +34,124 @@ export default {
             recData: [
                 {
                     title: "假装在法国",
-                    imgSrc: require("../../../assets/img/固定图1.jpg"),
+                    imgSrc: require("../../../assets/img/fixed1.jpg"),
                     like: true,
                     viewNum: 23,
                     commentNum: 3,
                     username: "mirsan",
                     attention: true,
                     time: "一天前",
-                    avatarSrc: require("../../../assets/img/固定图1.jpg")
+                    avatarSrc: require("../../../assets/img/fixed1.jpg")
                 },
                 {
                     title: "假装在法国",
-                    imgSrc: require("../../../assets/img/固定图2.jpg"),
+                    imgSrc: require("../../../assets/img/fixed2.jpg"),
                     like: true,
                     viewNum: 23,
                     commentNum: 3,
                     username: "mirsan",
                     attention: true,
                     time: "一天前",
-                    avatarSrc: require("../../../assets/img/固定图2.jpg")
+                    avatarSrc: require("../../../assets/img/fixed2.jpg")
                 },
                 {
                     title: "假装在法国",
-                    imgSrc: require("../../../assets/img/竖屏图.png"),
+                    imgSrc: require("../../../assets/img/shu.png"),
                     like: true,
                     viewNum: 23,
                     commentNum: 3,
                     username: "mirsan",
                     attention: true,
                     time: "一天前",
-                    avatarSrc: require("../../../assets/img/固定图2.jpg")
+                    avatarSrc: require("../../../assets/img/fixed2.jpg")
                 },
                 {
                     title: "假装在法国",
-                    imgSrc: require("../../../assets/img/固定图5.jpg"),
+                    imgSrc: require("../../../assets/img/fixed5.jpg"),
                     like: true,
                     viewNum: 23,
                     commentNum: 3,
                     username: "mirsan",
                     attention: true,
                     time: "一天前",
-                    avatarSrc: require("../../../assets/img/固定图2.jpg")
+                    avatarSrc: require("../../../assets/img/fixed2.jpg")
                 },
                 {
                     title: "假装在法国",
-                    imgSrc: require("../../../assets/img/固定图4.jpg"),
+                    imgSrc: require("../../../assets/img/fixed4.jpg"),
                     like: true,
                     viewNum: 23,
                     commentNum: 3,
                     username: "mirsan",
                     attention: true,
                     time: "一天前",
-                    avatarSrc: require("../../../assets/img/固定图2.jpg")
+                    avatarSrc: require("../../../assets/img/fixed2.jpg")
                 },
                 {
                     title: "假装在法国",
-                    imgSrc: require("../../../assets/img/竖屏图.png"),
+                    imgSrc: require("../../../assets/img/shu.png"),
                     like: true,
                     viewNum: 23,
                     commentNum: 3,
                     username: "mirsan",
                     attention: true,
                     time: "一天前",
-                    avatarSrc: require("../../../assets/img/固定图2.jpg")
+                    avatarSrc: require("../../../assets/img/fixed2.jpg")
                 },
                 {
                     title: "假装在法国",
-                    imgSrc: require("../../../assets/img/固定图4.jpg"),
+                    imgSrc: require("../../../assets/img/fixed4.jpg"),
                     like: true,
                     viewNum: 23,
                     commentNum: 3,
                     username: "mirsan",
                     attention: true,
                     time: "一天前",
-                    avatarSrc: require("../../../assets/img/固定图2.jpg")
+                    avatarSrc: require("../../../assets/img/fixed2.jpg")
                 },
                 {
                     title: "假装在法国",
-                    imgSrc: require("../../../assets/img/竖屏图.png"),
+                    imgSrc: require("../../../assets/img/shu.png"),
                     like: true,
                     viewNum: 23,
                     commentNum: 3,
                     username: "mirsan",
                     attention: true,
                     time: "一天前",
-                    avatarSrc: require("../../../assets/img/固定图2.jpg")
+                    avatarSrc: require("../../../assets/img/fixed2.jpg")
                 },
                 {
                     title: "假装在法国",
-                    imgSrc: require("../../../assets/img/固定图4.jpg"),
+                    imgSrc: require("../../../assets/img/fixed4.jpg"),
                     like: true,
                     viewNum: 23,
                     commentNum: 3,
                     username: "mirsan",
                     attention: true,
                     time: "一天前",
-                    avatarSrc: require("../../../assets/img/固定图2.jpg")
+                    avatarSrc: require("../../../assets/img/fixed2.jpg")
                 },
                 {
                     title: "假装在法国",
-                    imgSrc: require("../../../assets/img/竖屏图.png"),
+                    imgSrc: require("../../../assets/img/shu.png"),
                     like: true,
                     viewNum: 23,
                     commentNum: 3,
                     username: "mirsan",
                     attention: true,
                     time: "一天前",
-                    avatarSrc: require("../../../assets/img/固定图2.jpg")
+                    avatarSrc: require("../../../assets/img/fixed2.jpg")
                 },
                 {
                     title: "假装在法国",
-                    imgSrc: require("../../../assets/img/固定图4.jpg"),
+                    imgSrc: require("../../../assets/img/fixed4.jpg"),
                     like: true,
                     viewNum: 23,
                     commentNum: 3,
                     username: "mirsan",
                     attention: true,
                     time: "一天前",
-                    avatarSrc: require("../../../assets/img/固定图2.jpg")
+                    avatarSrc: require("../../../assets/img/fixed2.jpg")
                 },
             ]
         }

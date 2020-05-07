@@ -1,7 +1,8 @@
 <template>
     <div class="notice">
         <div class="notice-header">
-            <span>消息</span>
+            <span class="title">消息</span>
+            <span class="clearmsg" @click="clearMsg">清除通知</span>
         </div>
         <div style="height:50px;"></div>
         <div class="notice-content">
@@ -11,6 +12,7 @@
                 @touchstart="touchIndex=1"
                 @touchend="touchIndex=0"
                 :class="{touch:1 == touchIndex}"
+                @click="goPath('/sys_notice')"
             >
                 <div class="sys-img">
                     <img src="../../assets/img/sys-msg.png" alt="">
@@ -23,6 +25,7 @@
                 @touchstart="touchIndex=2"
                 @touchend="touchIndex=0"
                 :class="{touch:2 == touchIndex}"
+                @click="goPath('/comment_notice')"
             >
                 <div class="msg-img">
                     <img src="../../assets/img/msg-msg.png" alt="">
@@ -35,6 +38,7 @@
                 @touchstart="touchIndex=3"
                 @touchend="touchIndex=0"
                 :class="{touch:3 == touchIndex}"
+                @click="goPath('/like_notice')"
             >
                 <div class="like-img">
                     <img src="../../assets/img/like-msg.png" alt="">
@@ -43,12 +47,31 @@
                 <i class="van-icon van-icon-arrow"></i>
             </div>
         </div>
-
+        <div class="notice-msg">
+            <MsgCard></MsgCard>
+            <MsgCard></MsgCard>
+            <MsgCard></MsgCard>
+            <MsgCard></MsgCard>
+            <MsgCard></MsgCard>
+            <MsgCard></MsgCard>
+            <MsgCard></MsgCard>
+            <MsgCard></MsgCard>
+            <MsgCard></MsgCard>
+            <MsgCard></MsgCard>
+            <MsgCard></MsgCard>
+            <MsgCard></MsgCard>
+        </div>
+        暂无更多
+        <div style="height: 70px"></div>
     </div>
 </template>
 
 <script>
+import MsgCard from "../Common/MsgCard";
 export default {
+    components:{
+        MsgCard
+    },
     data() {
         return {
             touchIndex:0,
@@ -60,6 +83,12 @@ export default {
         },
         touchend() {
             this.touched = false;
+        },
+        clearMsg() {
+
+        },
+        goPath(url) {
+            this.$router.push(url);
         }
     }
 };
@@ -67,6 +96,7 @@ export default {
 
 <style scoped lang="scss">
 .notice {
+    position: relative;
     .notice-header {
         height: 50px;
         width: 100%;
@@ -75,12 +105,21 @@ export default {
         z-index: 9;
         background-color: #fff;
         border-bottom: 0.5px solid #cccccc;
-        span {
+        .title {
             position: absolute;
             top: 50%;
             left: 20px;
             transform: translateY(-50%);
             font-size: 18px;
+            font-weight: 500;
+            color: #555;
+        }
+        .clearmsg {
+            position: absolute;
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+            font-size: 12px;
             font-weight: 500;
             color: #555;
         }

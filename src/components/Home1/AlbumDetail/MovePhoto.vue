@@ -2,7 +2,7 @@
     <div class="move-photo">
         <div class="move-header">
             <div class="back-btn" @click="backToDetail">
-                <i class="van-icon van-icon-arrow-left"></i> <span>返回</span>
+                <i class="iconfont albumzuojiantou"></i>
             </div>
             <span class="title">移动到</span>
         </div>
@@ -37,61 +37,61 @@
             return {
                 albumData:[
                     {
-                        imgSrc: require("../../../assets/img/固定图2.jpg"),
+                        imgSrc: require("../../../assets/img/fixed2.jpg"),
                         title: "记录美好的点滴",
                         photoNum:"12",
                         see:"仅好友可见"
                     },
                     {
-                        imgSrc: require("../../../assets/img/固定图2.jpg"),
+                        imgSrc: require("../../../assets/img/fixed2.jpg"),
                         title: "记录美好的点滴",
                         photoNum:"12",
                         see:"仅好友可见"
                     },
                     {
-                        imgSrc: require("../../../assets/img/固定图2.jpg"),
+                        imgSrc: require("../../../assets/img/fixed2.jpg"),
                         title: "记录美好的点滴",
                         photoNum:"12",
                         see:"仅好友可见"
                     },
                     {
-                        imgSrc: require("../../../assets/img/固定图2.jpg"),
+                        imgSrc: require("../../../assets/img/fixed2.jpg"),
                         title: "记录美好的点滴",
                         photoNum:"12",
                         see:"仅好友可见"
                     },
                     {
-                        imgSrc: require("../../../assets/img/固定图2.jpg"),
+                        imgSrc: require("../../../assets/img/fixed2.jpg"),
                         title: "记录美好的点滴",
                         photoNum:"12",
                         see:"仅好友可见"
                     },
                     {
-                        imgSrc: require("../../../assets/img/固定图2.jpg"),
+                        imgSrc: require("../../../assets/img/fixed2.jpg"),
                         title: "记录美好的点滴",
                         photoNum:"12",
                         see:"仅好友可见"
                     },
                     {
-                        imgSrc: require("../../../assets/img/固定图2.jpg"),
+                        imgSrc: require("../../../assets/img/fixed2.jpg"),
                         title: "记录美好的点滴",
                         photoNum:"12",
                         see:"仅好友可见"
                     },
                     {
-                        imgSrc: require("../../../assets/img/固定图2.jpg"),
+                        imgSrc: require("../../../assets/img/fixed2.jpg"),
                         title: "记录美好的点滴",
                         photoNum:"12",
                         see:"仅好友可见"
                     },
                     {
-                        imgSrc: require("../../../assets/img/固定图2.jpg"),
+                        imgSrc: require("../../../assets/img/fixed2.jpg"),
                         title: "记录美好的点滴",
                         photoNum:"12",
                         see:"仅好友可见"
                     },
                     {
-                        imgSrc: require("../../../assets/img/固定图2.jpg"),
+                        imgSrc: require("../../../assets/img/fixed2.jpg"),
                         title: "记录美好的点滴",
                         photoNum:"12",
                         see:"仅好友可见"
@@ -117,20 +117,16 @@
         font-size: 18px;
         background-color: #fff;
         z-index: 999;
+        border-bottom: 0.5px solid #eee;
         .back-btn {
             width: 100px;
             height: 50px;
             i {
-
+                font-size: 26px;
                 color: #000;
                 position: absolute;
-                top: 18px;
+                top: 13px;
                 left: 13px;
-            }
-            span {
-                position: absolute;
-                top: 14px;
-                left: 34px;
             }
         }
         .title {
@@ -170,7 +166,7 @@
                 height: 80px;
                 position: relative;
                 float: left;
-                font-size: 20px;
+                font-size: 16px;
                 color: #0570db;
                 span {
                     position: absolute;
@@ -205,7 +201,7 @@
                 position: relative;
                 border-bottom: 0.6px solid #eee;
                 span:first-child {
-                    font-size: 18px;
+                    font-size: 16px;
                     position: absolute;
                     top: 15px;
                     left: 15px;

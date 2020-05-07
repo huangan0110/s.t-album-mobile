@@ -2,7 +2,7 @@
     <div class="upload">
         <div class="upload-header">
             <div class="back-btn" @click="back">
-                <i class="van-icon van-icon-arrow-left"></i> <span>取消</span>
+                <i class="iconfont albumzuojiantou"></i>
             </div>
             <span class="upload-title">上传照片</span>
             <span @click="uploadPic" class="up-btn">上传</span>
@@ -166,15 +166,17 @@
         .upload-header {
             height: 50px;
             width: 100%;
-            background-color: pink;
             position: fixed;
-
+            background-color: #fff;
+            border-bottom: 0.5px solid #eee;
+            color: #555;
+            z-index: 999;
             .back-btn {
                 width: 100px;
                 height: 50px;
-                font-size: 18px;
 
-                i, span {
+                i {
+                    font-size: 26px;
                     position: absolute;
                     top: 50%;
                     transform: translateY(-50%);
@@ -184,15 +186,11 @@
                     left: 12px;
                 }
 
-                span {
-                    left: 35px;
-                }
-
             }
 
             .upload-title {
                 position: absolute;
-                font-size: 18px;
+                font-size: 16px;
                 left: 50%;
                 transform: translateX(-50%);
                 top: 12px;
@@ -203,7 +201,7 @@
                 right: 25px;
                 top: 50%;
                 transform: translateY(-50%);
-                font-size: 18px;
+                font-size: 16px;
             }
         }
 

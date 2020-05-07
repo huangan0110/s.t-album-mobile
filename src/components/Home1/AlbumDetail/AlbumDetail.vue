@@ -2,37 +2,45 @@
     <div class="album-detail">
         <div class="edit-title clearfix" v-if="isEdit">
             <div class="back-btn" @click="editCancel">
-                <i class="van-icon van-icon-arrow-left"></i> <span>返回</span>
+                <i class="iconfont albumzuojiantou"></i>
             </div>
             <span class="choose-all" @click="chooseAll">全选</span>
         </div>
         <div class="edit-title1" v-if="isEdit"></div>
 
         <div class="album-title" v-if="!isEdit">
-            <img src="../../../assets/img/固定图1.jpg">
+            <img src="../../../assets/img/fixed1.jpg">
             <div class="detail-header" :class="{bgc:isBgc}">
                 <div class="back-btn" @click="goPath('/home')" :class="{isBlack:isBgc}">
-                    <i class="van-icon van-icon-arrow-left"></i> <span >返回</span>
+                    <i class="iconfont albumzuojiantou"></i>
                 </div>
-                <i :class="{isBlack:isBgc}" class="van-icon van-icon-more-o menu-btn" @click="showMnuPopup" v-if="!isEdit"></i>
-                <i class="van-icon van-icon-more-o up-btn-bgc" v-if="isBgc"></i>
+                <i :class="{isBlack:isBgc}" class="iconfont albumyoucecaidan menu-btn" @click="showMnuPopup" v-if="!isEdit"></i>
+                <i class="iconfont albumcamera up-btn-bgc" v-if="isBgc"></i>
             </div>
 
             <div class="title-bottom">
                 <span>相册标题相册标题</span>
                 <span>共1212张照片</span>
                 <div class="bottom-right">
-                    <i class="van-icon van-icon-eye-o"></i><span>浏览量 77</span>
+                    <i class="iconfont albumicon"></i><span>浏览量 77</span>
                 </div>
             </div>
         </div>
         <div class="up-btn" v-if="!isEdit">
-            <van-button icon="arrow-up" type="info">上传图片</van-button>
+            <van-button icon="1" type="info">上传图片</van-button>
+            <i class="iconfont albumcamera"></i>
         </div>
         <div class=" clearfix" :class="{bigview:isBigView,photolist:!isBigView}">
             <ul>
                 <li v-for="(item,index) in photoArray" :key="index" @click="choosely(index,item.id)">
-                    <img :src="item.imgSrc">
+<!--                    <img :src="item.imgSrc">-->
+                    <van-image
+                        width="100%"
+                        height="100%"
+                        lazy-load
+                        fit="cover"
+                        :src="item.imgSrc"
+                    />
                     <div class="checked" v-if="chooseAfterValue.indexOf( item.id )!=-1">
                         <i class="van-icon van-icon-success"></i>
                     </div>
@@ -58,9 +66,16 @@
         >
             <van-cell title="编辑相册" is-link icon="edit" @click="editAlbum"/>
             <van-cell title="管理照片" is-link icon="setting-o" @click="managePhoto"/>
-            <van-cell title="大图浏览" is-link icon="setting-o" @click="bigView" v-if="!isBigView"/>
-            <van-cell title="小图浏览" is-link icon="setting-o" @click="bigView" v-else/>
+            <van-cell title="大图浏览" is-link icon="expand-o" @click="bigView" v-if="!isBigView"/>
+            <van-cell title="小图浏览" is-link icon="photo-o" @click="bigView" v-else/>
         </van-popup>
+        <van-image-preview v-model="seePhoto" :images="imgSrcArr" @change="onChange" @close="onClose" closeable >
+            <template v-slot:index>第{{ index }}页</template>
+            <template v-slot:cover>
+                <div class="viewPhoto-bg" :style="bacImage">
+                </div>
+            </template>
+        </van-image-preview>
     </div>
 </template>
 
@@ -71,95 +86,102 @@
             return {
                 photoArray:[
                     {
-                        imgSrc: require("../../../assets/img/固定图2.jpg"),
+                        imgSrc: 'http://39.105.137.236/group1/M00/00/00/J2mJ7F6kAHuANI8kAAZzxYDyrIU172.jpg',
                         id:1
                     },
                     {
-                        imgSrc: require("../../../assets/img/固定图2.jpg"),
+                        imgSrc: 'http://39.105.137.236/group1/M00/00/00/J2mJ7F6kAHuANI8kAAZzxYDyrIU172.jpg',
                         id:2
                     },
                     {
-                        imgSrc: require("../../../assets/img/固定图2.jpg"),
+                        imgSrc: 'http://39.105.137.236/group1/M00/00/00/J2mJ7F6kAHuANI8kAAZzxYDyrIU172.jpg',
                         id:3
                     },
                     {
-                        imgSrc: require("../../../assets/img/固定图2.jpg"),
+                        imgSrc: 'http://39.105.137.236/group1/M00/00/00/J2mJ7F6kAHuANI8kAAZzxYDyrIU172.jpg',
                         id:4
                     },
                     {
-                        imgSrc: require("../../../assets/img/固定图2.jpg"),
+                        imgSrc: 'http://39.105.137.236/group1/M00/00/00/J2mJ7F6kAHuANI8kAAZzxYDyrIU172.jpg',
                         id:5
                     },
                     {
-                        imgSrc: require("../../../assets/img/固定图2.jpg"),
+                        imgSrc: 'http://39.105.137.236/group1/M00/00/00/J2mJ7F6kAHuANI8kAAZzxYDyrIU172.jpg',
                         id:6
                     },
                     {
-                        imgSrc: require("../../../assets/img/固定图2.jpg"),
+                        imgSrc: 'http://39.105.137.236/group1/M00/00/00/J2mJ7F6kAHuANI8kAAZzxYDyrIU172.jpg',
                         id:7
                     },
                     {
-                        imgSrc: require("../../../assets/img/固定图2.jpg"),
+                        imgSrc: 'http://39.105.137.236/group1/M00/00/00/J2mJ7F6kAHuANI8kAAZzxYDyrIU172.jpg',
                         id:8
                     },
                     {
-                        imgSrc: require("../../../assets/img/固定图2.jpg"),
+                        imgSrc: 'http://39.105.137.236/group1/M00/00/00/J2mJ7F6kAHuANI8kAAZzxYDyrIU172.jpg',
                         id:9
                     },
                     {
-                        imgSrc: require("../../../assets/img/固定图2.jpg"),
+                        imgSrc: 'http://39.105.137.236/group1/M00/00/00/J2mJ7F6kAHuANI8kAAZzxYDyrIU172.jpg',
                         id:10
                     },
                     {
-                        imgSrc: require("../../../assets/img/固定图2.jpg"),
+                        imgSrc: 'http://39.105.137.236/group1/M00/00/00/J2mJ7F6kAHuANI8kAAZzxYDyrIU172.jpg',
                         id:11
                     },
                     {
-                        imgSrc: require("../../../assets/img/固定图2.jpg"),
+                        imgSrc: 'http://39.105.137.236/group1/M00/00/00/J2mJ7F6kAHuANI8kAAZzxYDyrIU172.jpg',
                         id:12
                     },
                     {
-                        imgSrc: require("../../../assets/img/固定图2.jpg"),
+                        imgSrc: 'http://39.105.137.236/group1/M00/00/00/J2mJ7F6kAHuANI8kAAZzxYDyrIU172.jpg',
                         id:13
                     },
                     {
-                        imgSrc: require("../../../assets/img/固定图2.jpg"),
+                        imgSrc: 'http://39.105.137.236/group1/M00/00/00/J2mJ7F6kAHuANI8kAAZzxYDyrIU172.jpg',
                         id:14
                     },
                     {
-                        imgSrc: require("../../../assets/img/固定图2.jpg"),
+                        imgSrc: 'http://39.105.137.236/group1/M00/00/00/J2mJ7F6kAHuANI8kAAZzxYDyrIU172.jpg',
                         id:15
                     },
                     {
-                        imgSrc: require("../../../assets/img/固定图2.jpg"),
+                        imgSrc: 'http://39.105.137.236/group1/M00/00/00/J2mJ7F6kAHuANI8kAAZzxYDyrIU172.jpg',
                         id:16
                     },
                     {
-                        imgSrc: require("../../../assets/img/固定图2.jpg"),
+                        imgSrc: 'http://39.105.137.236/group1/M00/00/00/J2mJ7F6kAHuANI8kAAZzxYDyrIU172.jpg',
                         id:17
                     },
                     {
-                        imgSrc: require("../../../assets/img/固定图2.jpg"),
+                        imgSrc: 'http://39.105.137.236/group1/M00/00/00/J2mJ7F6kAHuANI8kAAZzxYDyrIU172.jpg',
                         id:18
                     },
                     {
-                        imgSrc: require("../../../assets/img/固定图2.jpg"),
+                        imgSrc: 'http://39.105.137.236/group1/M00/00/00/J2mJ7F6kAHuANI8kAAZzxYDyrIU172.jpg',
                         id:19
                     },
                     {
-                        imgSrc: require("../../../assets/img/固定图2.jpg"),
+                        imgSrc: 'http://39.105.137.236/group1/M00/00/00/J2mJ7F6kAHuANI8kAAZzxYDyrIU172.jpg',
                         id:20
                     },
                     {
-                        imgSrc: require("../../../assets/img/固定图2.jpg"),
+                        imgSrc: 'http://39.105.137.236/group1/M00/00/00/J2mJ7F6kAHuANI8kAAZzxYDyrIU172.jpg',
                         id:21
                     },
                 ],
                 showMenu:false,
                 isEdit:false,
                 chooseAfterValue:[],
+                idArr: [],
                 isBgc:false,
-                isBigView:false
+                isBigView:false,
+                seePhoto:false,
+                imgSrcArr:[],
+                index: 1,
+                bacImage: {
+                    backgroundImage: "",
+                },
             }
         },
         mounted() {
@@ -169,7 +191,6 @@
             headerBgc() {
                 var scrollTop = document.body.scrollTop || document.documentElement.scrollTop;
                 var clientHeight=document.documentElement.clientHeight;
-                console.log(scrollTop)
                 //滚动条的高度>可视区的高度
                 if(scrollTop>(clientHeight*0.32-120)){
                     this.isBgc = true;
@@ -209,7 +230,23 @@
             },
             choosely(index,id){
                 if(!this.isEdit) {
-                    alert("查看" + id)
+                    let prevArr = [];
+                    let nextArr = [];
+                    this.index = this.photoArray[index].id;
+                    for (let i = 0; i < this.photoArray.length; i++) {
+                        if (i < index) {
+                            prevArr.push(this.photoArray[i]);
+                        } else {
+                            nextArr.push(this.photoArray[i]);
+                        }
+                    }
+                    nextArr.push.apply(nextArr, prevArr);
+                    for (let i = 0; i < nextArr.length; i++) {
+                        this.imgSrcArr.push(nextArr[i].imgSrc);
+                        this.idArr.push(nextArr[i].id)
+                    }
+                    this.bacImage.backgroundImage = "url(" + this.imgSrcArr[id] + ") "
+                    this.seePhoto = true;
                 }else{
                     if(this.chooseAfterValue.indexOf( id )!=-1){
                         this.chooseAfterValue.splice( this.chooseAfterValue.indexOf( id ), 1 )
@@ -217,6 +254,13 @@
                         this.chooseAfterValue.push(id)
                     }
                 }
+            },
+            onChange(index){
+                this.index = this.idArr[index];
+                this.bacImage.backgroundImage = "url(" + this.imgSrcArr[index] + ") "
+            },
+            onClose() {
+                this.imgSrcArr = [];
             },
             chooseAll() {
                 if(this.chooseAfterValue.length != this.photoArray.length) {
@@ -241,6 +285,37 @@
     >>>.van-cell {
         padding: 16px 16px;
     }
+    > > > .van-image-preview__overlay {
+        background-color: rgba(0, 0, 0, 1);
+    }
+
+    > > > .van-swipe {
+        z-index: 9999 !important;
+    }
+    >>>.van-image-preview__close-icon {
+        z-index: 9999999;
+    }
+    >>>.van-image-preview__index {
+        z-index: 999999;
+    }
+    .viewPhoto-bg {
+        width: 100%;
+        height: 100%;
+        background: url('../../../assets/img/fixed2.jpg') no-repeat;
+        background-size: cover;
+        filter: blur(45px) brightness(0.7);;
+        transition: linear 0.3s;
+        webkit-transform: translateZ(0);
+        -moz-transform: translateZ(0);
+        -ms-transform: translateZ(0);
+        -o-transform: translateZ(0);
+        transform: translateZ(0);
+    }
+
+    > > > .van-image-preview__cover {
+        width: 100%;
+        height: 100%;
+    }
     .edit-title1 {
         height: 50px;
     }
@@ -256,7 +331,7 @@
             width: 100px;
             height: 50px;
             i {
-
+                font-size: 26px;
                 color: #000;
                 position: absolute;
                 top: 15px;
@@ -274,6 +349,8 @@
             right: 15px;
             top: 50%;
             transform: translateY(-50%);
+            font-size: 16px;
+            color: #444;
         }
 
     }
@@ -298,26 +375,22 @@
             height: 56px;
             width: 100%;
             .back-btn {
-                font-size: 18px;
                 position: absolute;
-                top: 18px;
+                top: 12px;
                 left: 12px;
                 color: #fff;
                 width: 60px;
                 i {
+                    font-size: 26px;
                     position: absolute;
                     margin-top: 4px;
-                }
-                span {
-                    position: absolute;
-                    left: 20px;
                 }
             }
             .menu-btn {
                 position: absolute;
-                top: 18px;
+                top: 20px;
                 right: 15px;
-                font-size: 24px;
+                font-size: 20px;
                 color: #fff;
             }
             .up-btn-bgc {
@@ -336,7 +409,7 @@
             bottom: 0;
             color: #fff;
             span:first-child {
-                font-size: 20px;
+                font-size: 18px;
                 position: absolute;
                 left: 10px;
                 top: 0;
@@ -346,6 +419,7 @@
                 left: 10px;
                 top: 30px;
                 font-size: 12px;
+                color: #eee;
             }
             .bottom-right {
                 position: absolute;
@@ -353,6 +427,7 @@
                 width: 100px;
                 height: 30px;
                 bottom: 0;
+                color: #eee;
                 i{
                     position: absolute;
                     left: 0;
@@ -368,12 +443,19 @@
     }
 
     .up-btn {
-        background-color: pink;
         width: 90%;
         margin: 10px auto;
-
+        position: relative;
         .van-button {
             width: 100%;
+        }
+        i {
+            position: absolute;
+            top: 50%;
+            font-size: 18px;
+            color: #eeeeee;
+            transform: translateY(-50%);
+            left: 35%;
         }
     }
 
@@ -387,11 +469,18 @@
                 margin-right: 0.5vw;
                 margin-bottom: 0.5vw;
                 position: relative;
-                img {
-                    width: 100%;
-                    height: 100%;
-                    object-fit: cover;
-                }
+                /*>>>.van-image {*/
+                /*    height: 100%;*/
+                /*    img {*/
+                /*        width: 100%;*/
+                /*        height: 100%;*/
+                /*        object-fit: cover;*/
+                /*    }*/
+                /*    >>>.van-image__error, .van-image__img, .van-image__loading {*/
+                /*        object-fit: cover;*/
+                /*    }*/
+                /*}*/
+
                 .checked {
                     width: 20px;
                     height: 20px;

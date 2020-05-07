@@ -16,6 +16,10 @@ import EditInfo from "../components/Mine/EditInfo";
 import ChnagePass from "../components/Mine/ChnagePass";
 import ChangeBg from "../components/Mine/ChangeBg";
 import ViewLevel from "../components/Mine/ViewLevel";
+import CommentNotice from "../components/Notice/NoticeType/CommentNotice";
+import LikeNotice from "../components/Notice/NoticeType/LikeNotice";
+import SysNotice from "../components/Notice/NoticeType/SysNotice";
+import FeaturedDetail from "../components/Common/FeaturedDetail";
 
 
 Vue.use(Router)
@@ -36,6 +40,7 @@ export default new Router({
             component: Login,
             meta: {
                 showTabbar: false,
+                index:1
             }
         },
         {
@@ -44,6 +49,7 @@ export default new Router({
             component: EmailLogin,
             meta: {
                 showTabbar: false,
+                index: 2
             }
         },
         {
@@ -52,6 +58,7 @@ export default new Router({
             component: Home,
             meta: {
                 showTabbar: true,
+                index:3
             }
         },
         {
@@ -60,6 +67,7 @@ export default new Router({
             component: UpLoad,
             meta: {
                 showTabbar: false,
+                index:4
             }
         },
         {
@@ -68,6 +76,15 @@ export default new Router({
             component: Featured,
             meta: {
                 showTabbar: true,
+                index:4
+            }
+        },
+        {
+            path: '/featured_detail',
+            name: 'FeaturedDetail',
+            component: FeaturedDetail,
+            meta: {
+                showTabbar: false,
             }
         },
         {
@@ -116,6 +133,30 @@ export default new Router({
             component: Notice,
             meta: {
                 showTabbar: true,
+            }
+        },
+        {
+            path: '/comment_notice',
+            name: 'CommentNotice',
+            component: CommentNotice,
+            meta: {
+                showTabbar: false,
+            }
+        },
+        {
+            path: '/like_notice',
+            name: 'LikeNotice',
+            component: LikeNotice,
+            meta: {
+                showTabbar: false,
+            }
+        },
+        {
+            path: '/sys_notice',
+            name: 'SysNotice',
+            component: SysNotice,
+            meta: {
+                showTabbar: false,
             }
         },
         {

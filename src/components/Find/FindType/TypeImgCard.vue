@@ -68,7 +68,7 @@ export default {
     props: {
         imgSrc: {
             type: String,
-            default: require("./../../../assets/img/固定图2.jpg")
+            default: require("./../../../assets/img/fixed2.jpg")
         },
         showLike: {
             type: Boolean,

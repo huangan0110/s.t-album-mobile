@@ -5,17 +5,17 @@
             <i class="iconfont albumsousuo4"></i>
         </div>
         <div style="height:50px"></div>
-        <div class="find-content clearfix">
-            <h3>分类</h3>
-            <ul>
-                <li v-for="(item, index) in typeData" :key="index">
-                    <div class="type-card" @click="viewType">
-                        <img :src="item.imgSrc" />
-                        <span>{{ item.title }}</span>
-                    </div>
-                </li>
-            </ul>
-        </div>
+<!--        <div class="find-content clearfix">-->
+<!--            <h3>分类</h3>-->
+<!--            <ul>-->
+<!--                <li v-for="(item, index) in typeData" :key="index">-->
+<!--                    <div class="type-card" @click="viewType">-->
+<!--                        <img :src="item.imgSrc" />-->
+<!--                        <span>{{ item.title }}</span>-->
+<!--                    </div>-->
+<!--                </li>-->
+<!--            </ul>-->
+<!--        </div>-->
     </div>
 </template>
 
@@ -23,67 +23,10 @@
 export default {
     data() {
         return {
-            touched: false,
-            typeData: [
-                {
-                    imgSrc: require("./../../assets/img/固定图2.jpg"),
-                    title: "风光"
-                },
-                {
-                    imgSrc: require("./../../assets/img/固定图4.jpg"),
-                    title: "风光"
-                },
-                {
-                    imgSrc: require("./../../assets/img/固定图4.jpg"),
-                    title: "风光"
-                },
-                {
-                    imgSrc: require("./../../assets/img/固定图4.jpg"),
-                    title: "风光"
-                },
-                {
-                    imgSrc: require("./../../assets/img/固定图4.jpg"),
-                    title: "风光"
-                },
-                {
-                    imgSrc: require("./../../assets/img/固定图4.jpg"),
-                    title: "风光"
-                },
-                {
-                    imgSrc: require("./../../assets/img/固定图4.jpg"),
-                    title: "风光"
-                },
-                {
-                    imgSrc: require("./../../assets/img/固定图4.jpg"),
-                    title: "风光"
-                },
-                {
-                    imgSrc: require("./../../assets/img/固定图4.jpg"),
-                    title: "风光"
-                },
-                {
-                    imgSrc: require("./../../assets/img/固定图4.jpg"),
-                    title: "风光"
-                },
-                {
-                    imgSrc: require("./../../assets/img/固定图4.jpg"),
-                    title: "风光"
-                },
-                {
-                    imgSrc: require("./../../assets/img/固定图4.jpg"),
-                    title: "风光"
-                },
-                {
-                    imgSrc: require("./../../assets/img/固定图4.jpg"),
-                    title: "风光"
-                }
-            ]
         };
     },
     methods: {
-        viewType() {
-            this.$router.push('/type');
-        }
+
     }
 };
 </script>
@@ -93,8 +36,7 @@ export default {
     .find-header {
         height: 50px;
         width: 100%;
-        border-bottom: 1px solid #eee;
-        box-shadow: 0px 8px 25px -22px #5e5e5e;
+        border-bottom: 0.5px solid #ccc;
         position: fixed;
         top: 0;
         z-index: 9;

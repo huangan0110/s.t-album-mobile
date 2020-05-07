@@ -1,6 +1,6 @@
 <template>
     <div class="attention-cell" @click="test('1')">
-        <img src="../../assets/img/固定图4.jpg">
+        <img src="../../assets/img/fixed4.jpg">
         <span class="user-name">用户名</span>
         <div class="user-info">
             <span class="featured-span">5精选</span>&nbsp;

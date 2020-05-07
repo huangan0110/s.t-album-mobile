@@ -125,6 +125,7 @@ export default {
     width: 100%;
     background-color: #fff;
     position: fixed;
+    z-index: 999;
     bottom: 0;
     border-top: 1px solid #ddd;
     overflow: hidden;
@@ -157,7 +158,7 @@ export default {
             color: #fff;
             background-color: #1296db;
             padding: 5px 12px;
-            border-radius: 5px;
+            border-radius: 15px;
         }
     }
 }

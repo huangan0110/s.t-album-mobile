@@ -2,7 +2,7 @@
     <div class="home">
         <div class="home-header">
             <span>我的相册</span>
-            <i class="iconfont albumsousuo4"></i>
+<!--            <i class="iconfont albumsousuo4"></i>-->
         </div>
         <div class="home-content clearfix">
             <ul>
@@ -35,42 +35,42 @@
             return {
                 albumData:[
                     {
-                        imgSrc: require("./../../assets/img/固定图2.jpg"),
+                        imgSrc: require("./../../assets/img/fixed2.jpg"),
                         title: "风光",
                         photoNum:"12"
                     },
                     {
-                        imgSrc: require("./../../assets/img/固定图4.jpg"),
+                        imgSrc: require("./../../assets/img/fixed4.jpg"),
                         title: "风光",
                         photoNum:"12"
                     },
                     {
-                        imgSrc: require("./../../assets/img/固定图2.jpg"),
+                        imgSrc: require("./../../assets/img/fixed2.jpg"),
                         title: "风光",
                         photoNum:"12"
                     },
                     {
-                        imgSrc: require("./../../assets/img/固定图4.jpg"),
+                        imgSrc: require("./../../assets/img/fixed4.jpg"),
                         title: "风光",
                         photoNum:"12"
                     },
                     {
-                        imgSrc: require("./../../assets/img/固定图2.jpg"),
+                        imgSrc: require("./../../assets/img/fixed2.jpg"),
                         title: "风光",
                         photoNum:"12"
                     },
                     {
-                        imgSrc: require("./../../assets/img/固定图4.jpg"),
+                        imgSrc: require("./../../assets/img/fixed4.jpg"),
                         title: "风光",
                         photoNum:"12"
                     },
                     {
-                        imgSrc: require("./../../assets/img/固定图2.jpg"),
+                        imgSrc: require("./../../assets/img/fixed2.jpg"),
                         title: "风光",
                         photoNum:"12"
                     },
                     {
-                        imgSrc: require("./../../assets/img/固定图4.jpg"),
+                        imgSrc: require("./../../assets/img/fixed4.jpg"),
                         title: "风光",
                         photoNum:"12"
                     },
@@ -135,13 +135,14 @@
                 .add-album {
                     width: calc(100% - 2px);
                     height: calc(100% - 2px);
-                    border: 1px solid blue;
+                    border: 1px solid #eee;
                     text-align: center;
+                    border-radius: 5px;
                     i {
                         margin-top: 50px;
                         font-size: 60px;
                     }
-                    color: blue;
+                    color: #666;
                     transition: linear 0.1s;
                 }
                 .add-album:active {

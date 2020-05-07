@@ -100,10 +100,10 @@ export default {
             min:false,
             images: [
                 {
-                    src: require("../../../assets/img/固定图2.jpg")
+                    src: require("../../../assets/img/fixed2.jpg")
                 },
                 {
-                    src: require("../../../assets/img/固定图5.jpg")
+                    src: require("../../../assets/img/fixed5.jpg")
                 },
                 {
                     src: require("../../../assets/img/xin.jpg")
@@ -114,7 +114,7 @@ export default {
     props: {
         imgSrc: {
             type: String,
-            default: require("./../../../assets/img/固定图2.jpg")
+            default: require("./../../../assets/img/fixed2.jpg")
         },
         showLike: {
             type: Boolean,

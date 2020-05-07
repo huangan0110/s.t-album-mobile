@@ -1,6 +1,6 @@
 <template>
     <div class="login">
-        <img src="../../assets/img/logo.png" />
+        <img src="../../assets/img/logo.jpg" />
         <div class="login-btn">
             <van-button round type="info" hairline  @click="goPath('/email-login')">邮箱登录</van-button>
             <van-button round plain type="info" hairline  @click="goPath('/home')">立即体验</van-button>
@@ -38,11 +38,11 @@ export default {
 .login {
     img {
         position: absolute;
-        width: 80px;
-        height: 80px;
+        width: 140px;
+        height: 140px;
         left: 50%;
         transform: translateX(-50%);
-        top: 80px;
+        top: 120px;
     }
     .login-btn {
         width: 80%;

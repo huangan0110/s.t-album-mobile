@@ -6,6 +6,62 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "1761430",
+      "name": "更多操作",
+      "font_class": "gengduocaozuo",
+      "unicode": "e62c",
+      "unicode_decimal": 58924
+    },
+    {
+      "icon_id": "1613601",
+      "name": "右侧菜单",
+      "font_class": "youcecaidan",
+      "unicode": "e606",
+      "unicode_decimal": 58886
+    },
+    {
+      "icon_id": "148101",
+      "name": "照相机",
+      "font_class": "zhaoxiangji",
+      "unicode": "e6ec",
+      "unicode_decimal": 59116
+    },
+    {
+      "icon_id": "630128",
+      "name": "照相机",
+      "font_class": "zhaoxiangji1",
+      "unicode": "e663",
+      "unicode_decimal": 58979
+    },
+    {
+      "icon_id": "5849200",
+      "name": "照相机",
+      "font_class": "zhaoxiangji2",
+      "unicode": "e60a",
+      "unicode_decimal": 58890
+    },
+    {
+      "icon_id": "10635092",
+      "name": "照相机",
+      "font_class": "camera",
+      "unicode": "e610",
+      "unicode_decimal": 58896
+    },
+    {
+      "icon_id": "11800275",
+      "name": "照相机",
+      "font_class": "zhaoxiangji3",
+      "unicode": "e612",
+      "unicode_decimal": 58898
+    },
+    {
+      "icon_id": "13668311",
+      "name": "一级菜单",
+      "font_class": "yijicaidan",
+      "unicode": "e641",
+      "unicode_decimal": 58945
+    },
+    {
       "icon_id": "777841",
       "name": "浏览",
       "font_class": "icon",
