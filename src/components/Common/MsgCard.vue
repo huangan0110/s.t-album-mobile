@@ -1,20 +1,34 @@
 <template>
     <div class="msg-card">
         <div class="msg-user">
-            <img src="../../assets/img/fixed4.jpg" alt=""><span class="msg-user-name">用户名用户1</span>
-            <span class="msg-time">4天前</span>
+            <img src="../../assets/img/fixed4.jpg" alt="">
+            <span class="msg-user-name">{{msgData.sender.nickName}}</span>
+            <span class="msg-time">{{msgData.createTime}}</span>
         </div>
-        <div class="msg-option">赞了你的评论</div>
+        <div class="msg-option">评论了你的分享</div>
         <div class="msg-info">
-            @用户名用户名
-            <p>12312312321</p>
+            @你
+            <p>{{msgData.comment}}</p>
         </div>
     </div>
 </template>
 
 <script>
     export default {
-        name: "MsgCard"
+        name: "MsgCard",
+        props:{
+            msgData:{
+                type:Object,
+                default:{},
+            },
+            isComment:{
+                type: Boolean,
+                default: false
+            },
+        },
+        mounted() {
+            console.log(this.msgData)
+        }
     }
 </script>
 

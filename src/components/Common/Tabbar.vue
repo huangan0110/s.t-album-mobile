@@ -36,7 +36,7 @@
 export default {
     data() {
         return {
-            checkIndex: 1,
+            checkIndex: "1",
             istouched: 0,
             showAddPop: false,
             fileList: [],
@@ -48,8 +48,13 @@ export default {
             return document.querySelector(".my-container");
         },
         goPath(index, path) {
-            this.checkIndex = index;
-            this.$router.push(path);
+            if(index == 5 && !localStorage.getItem('access_token')) {
+                this.$router.push("email-login");
+                location.reload();
+            }else{
+                this.checkIndex = index;
+                this.$router.push(path);
+            }
         },
         bg() {
             this.istouched = 0;

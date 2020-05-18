@@ -8,6 +8,13 @@
             <span class="edit-save" @click="saveEdit">保存</span>
         </div>
         <div class="edit-content">
+            <div class="choose_avatar">
+                &nbsp;&nbsp;&nbsp;&nbsp;头像
+               &nbsp;&nbsp;&nbsp;&nbsp;
+                <div style="position: absolute;left: 60px;top: 8px">
+                    <van-uploader v-model="fileList" :after-read="afterRead" :max-count="1"/>
+                </div>
+            </div>
             <van-field
                 v-model="userName"
                 label="昵称"
@@ -16,15 +23,13 @@
             />
             <br>
             <van-cell-group>
+                <van-cell title="性别" :value="gender=='1' ? '男':'女'" clickable @click="chooseGender"/>
                 <van-field
-                    v-model="tel=='' ? '暂无':tel"
-                    label="电话"
-                    placeholder="请输入电话"
+                    v-model="age"
+                    label="年龄"
+                    placeholder="暂无"
                     input-align="right"
                 />
-                <van-cell title="性别" :value="gender=='1' ? '男':'女'" clickable @click="chooseGender"/>
-                <van-cell title="生日" :value="birthday=='' ? '暂无':birthday" clickable @click="chooseBirthday"/>
-                <van-cell title="城市" :value="city == '' ? '暂无':city" clickable @click="chooseCity"/>
                 <van-field
                     v-model="desc=='' ? '暂无':desc"
                     label="个人说明"
@@ -47,8 +52,8 @@
                     />
                 </template>
             </van-cell>
-            <van-cell title="女" clickable @click="gender='0',showGender=false">
-                <template #right-icon v-if="gender == 0">
+            <van-cell title="女" clickable @click="gender='2',showGender=false">
+                <template #right-icon v-if="gender == 2">
                     <van-icon
                         name="success"
                         style="line-height: inherit;"
@@ -79,11 +84,13 @@
 </template>
 
 <script>
-    import {getCity} from "../../api/getData";
+    import {getCity,upFil,updateUserInfo,upFile,updateUserAvatar} from "../../api/getData";
     export default {
         name: "EditInfo",
         data() {
             return {
+                fileList:[
+                ],
                 minDate: new Date(1920, 0, 1),
                 maxDate: new Date(),
                 currentDate: new Date(2000, 0, 1),
@@ -96,7 +103,9 @@
                 showGender:false,
                 showBirthday:false,
                 showCity:false,
-                cityData:''
+                cityData:'',
+                deviceFile:[],
+                age:""
             }
         },
         created() {
@@ -104,12 +113,52 @@
                 this.cityData = res.data.columns;
             })
         },
+        mounted(){
+            let data = this.$route.query.data;
+            this.userName = data.nickName;
+            this.gender = data.genderId;
+            this.age = data.age;
+            this.fileList = [{url:data.avatar}]
+        },
         methods: {
+            afterRead(file){
+                let deviceFile = []  //选择的图片数组
+                let formData = new FormData();
+                if(Array.isArray(file)){ //因为该组件单选是对象，多选是数组
+                    this.deviceFile = file
+                }else{
+                    this.deviceFile.push(file)
+                }
+                this.deviceFile.map((item)=>{
+                    formData.append('file', item.file ,item.file.name);
+                })
+                updateUserAvatar(formData).then(res=>{
+                    if(res.data.success) {
+                        this.$toast({
+                            message:"设置头像成功",
+                            position:"bottom"
+                        });
+                        this.bgSrc = formData.background.slice(4,-2);
+                    }else{
+                        this.$toast({
+                            message:res.data.message,
+                            position:"bottom"
+                        });
+                    }
+                })
+            },
             back() {
                 this.$router.push('/mine')
             },
             saveEdit() {
-                alert("保存")
+                let formData = {};
+                formData.age = this.age;
+                formData.genderId = this.gender;
+                formData.nickName = this.userName;
+                updateUserInfo(formData).then(res=>{
+
+                })
+
             },
             chooseGender() {
                 this.showGender = true;
@@ -186,6 +235,13 @@
         }
     }
     .edit-content {
+        .choose_avatar {
+            position: relative;
+            height: 100px;
+            font-size: 14px;
+            line-height: 100px;
+            color: #323233;
+        }
         >>>.van-cell:not(:last-child)::after {
             /*border: 0;*/
         }

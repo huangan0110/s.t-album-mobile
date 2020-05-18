@@ -1,37 +1,66 @@
 <template>
     <div class="email-login">
         <div class="header">
-            <i class="iconfont albumzuojiantou" @click="goPath('/')"></i><span>邮箱登录</span>
+            &nbsp;&nbsp;<i class="iconfont albumzuojiantou" @click="goPath('/')"></i>&nbsp;&nbsp;<span>邮箱登录</span>
         </div>
         <div class="tip">
-            <span>未注册过的邮箱登录后将自动创建账号</span>
+            <span @click="register">&nbsp;&nbsp;没有账号?  立即注册账号</span>
         </div>
         <div class="email-input">
             <van-field
                 v-model="email"
                 left-icon="envelop-o"
-                right-icon="warning-o"
                 placeholder="请输入邮箱"
             />
         </div>
+        <div class="email-input">
+            <van-field
+                v-model="pass"
+                left-icon="envelop-o"
+                placeholder="请输入密码"
+            />
+        </div>
         <div class="login-btn">
-            <van-button round type="info" >下一步</van-button>
+            <van-button round type="info" @click="login11" :loading="isLogin" loading-text="登录中">登录</van-button>
         </div>
 
     </div>
 </template>
 
 <script>
-export default {
+    import {login} from "../../api/getData";
+
+    export default {
     data() {
         return {
-            email:'',
+            email:'1686313466@qq.com',
+            pass:"123456",
+            isLogin:false
         }
     },
     methods:{
         goPath(url) {
             this.$router.push(url)
-        }
+        },
+        register() {
+            this.$router.push("/register")
+        },
+        login11() {
+            this.isLogin = true;
+            login(this.email,this.pass).then(res=>{
+                this.isLogin = false;
+                localStorage.setItem("access_token",res.data.access_token);
+                localStorage.setItem("refresh_token",res.data.refresh_token);
+                this.$router.push('/home');
+            }).catch(err=>{
+                this.$toast({
+                    message:"登录失败",
+                    position:"bottom"
+                });
+                this.password = '';
+                this.isLogin = false;
+            })
+        },
     }
 }
 </script>
@@ -39,6 +68,10 @@ export default {
 <style scoped lang="scss">
 .email-login {
     padding: 10px;
+    position: absolute;
+    width: calc(100% - 20px);
+    height: calc(100% - 20px);
+    overflow: hidden;
     .header {
         width: 100%;
         height: 40px;

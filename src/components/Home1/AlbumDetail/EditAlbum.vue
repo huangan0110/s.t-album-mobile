@@ -14,51 +14,118 @@
                 <span>权限</span>
                 <div class="vanmenu">
                     <van-dropdown-menu>
-                        <van-dropdown-item v-model="value1" :options="option" />
+                        <van-dropdown-item v-model="visiblePermissionId" :options="option" />
                     </van-dropdown-menu>
                 </div>
             </div>
 
         </div>
         <div class="del-btn">
-            <van-button plain hairline type="danger" @click="delAlbum" v-if="this.type == 'edit'">删除</van-button>
-            <van-button plain hairline type="info" @click="delAlbum" v-if="this.type == 'add'">保存</van-button>
+<!--            <van-button plain hairline type="danger" @click="delAlbum" v-if="this.type == 'edit'">删除</van-button>-->
+            <van-button plain hairline type="info" @click="addAlbum" v-if="this.type == 'add'">保存</van-button>
         </div>
     </div>
 </template>
 
 <script>
+    import {addAlbum,updateAlbum} from "../../../api/getData";
+
     export default {
         name: "EditAlbum",
         data() {
             return {
                 title:"",
-                value1:0,
+                title1:"",
+                id:"",
+                visiblePermissionId:"1",
                 option: [
-                    {text: '所有人可见', value: 0},
-                    {text: '仅好友可见', value: 1},
-                    {text: '仅自己可见', value: 2}
+                    {text: '所有人可见', value: '3'},
+                    {text: '仅粉丝可见', value: '2'},
+                    {text: '仅自己可见', value: '1'}
                 ],
-                type:''
+                type:'',
             }
         },
         mounted() {
+            if(this.$route.query.visiblePermissionId) {
+                this.visiblePermissionId = this.$route.query.visiblePermissionId
+            }
             this.type = this.$route.query.type;
-            console.log(this.$route.query.type);
+            this.title = this.$route.query.title
+            this.title1 = this.$route.query.title
+            this.background = this.$route.query.background
+            this.id = this.$route.query.id
+            console.log( this.visiblePermissionId)
+
         },
         methods: {
             back() {
                 if(this.type == 'edit') {
-                    this.$router.push('/album_detail');
+                    this.$router.push({
+                        path:"/album_detail",
+                        query: {
+                            id: this.id,
+                            title:this.title1,
+                            visiblePermissionId:this.visiblePermissionId,
+                            background:this.background
+                        }
+                    });
                 }else{
                     this.$router.push('/home');
                 }
             },
             saveEdit() {
-                alert("保存")
+                if(this.type == 'edit') {
+                    let formData = {};
+                    formData.id = this.id;
+                    formData.name = this.title;
+                    formData.visiblePermissionId = this.visiblePermissionId;
+                    updateAlbum(formData).then(res=>{
+                        if(res.data.success) {
+                            this.$toast({
+                                message:"编辑成功",
+                                position:"bottom"
+                            });
+                            this.$router.push({
+                                path:"/album_detail",
+                                query: {
+                                    id: this.id,
+                                    title:this.title,
+                                    visiblePermissionId:this.visiblePermissionId
+                                }
+                            });
+                        }else{
+                            this.$toast({
+                                message:res.data.message,
+                                position:"bottom"
+                            });
+                        }
+                    })
+                }
+            },
+            addAlbum(){
+                if(this.type == 'add') {
+                    addAlbum(this.title,this.value1).then(res => {
+                        if(res.data.success) {
+                            this.$toast({
+                                message:"添加成功",
+                                position:"bottom"
+                            });
+                            this.$router.push({
+                                path:"/home",
+                            });
+                        }else{
+                            this.$toast({
+                                message:res.data.message,
+                                position:"bottom"
+                            });
+                        }
+                    })
+                }
             },
             delAlbum() {
-                alert("删除")
+                // alert("删除")
+                debugger;
             }
         }
     }
@@ -102,7 +169,7 @@
 
             .edit-save {
                 position: absolute;
-                font-size: 18px;
+                font-size: 16px;
                 right: 16px;
                 top: 12px;
             }

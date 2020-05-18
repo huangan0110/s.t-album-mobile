@@ -1,16 +1,18 @@
 <template>
     <div class="mine-featured">
         <span class="count">全部动态(2)</span>
-        <FeaturedCard></FeaturedCard>
-        <FeaturedCard></FeaturedCard>
-        <FeaturedCard></FeaturedCard>
-        <FeaturedCard></FeaturedCard>
-        <FeaturedCard></FeaturedCard>
-        <FeaturedCard></FeaturedCard>
-        <FeaturedCard></FeaturedCard>
-        <FeaturedCard></FeaturedCard>
-        <FeaturedCard></FeaturedCard>
-        <FeaturedCard></FeaturedCard>
+<!--        <FeaturedCard-->
+<!--            v-for="(item,index) in shareData"-->
+<!--            :imageList="item.imageList"-->
+<!--            :browseNum="item.browseNum"-->
+<!--            :commentNum="item.commentNum"-->
+<!--            :content="item.content"-->
+<!--            :id="item.id"-->
+<!--            :userInfo="item.userInfo"-->
+<!--            :likeNum="item.likeNum"-->
+<!--            :createTime="item.createTime"-->
+<!--            :isDelete="false"-->
+<!--        ></FeaturedCard>-->
     </div>
 </template>
 

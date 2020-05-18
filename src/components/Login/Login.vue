@@ -3,7 +3,7 @@
         <img src="../../assets/img/logo.jpg" />
         <div class="login-btn">
             <van-button round type="info" hairline  @click="goPath('/email-login')">邮箱登录</van-button>
-            <van-button round plain type="info" hairline  @click="goPath('/home')">立即体验</van-button>
+            <van-button round plain type="info" hairline  @click="goPath('/featured')">立即体验</van-button>
         </div>
         <div class="login-icon">
             <i class="iconfont albumweixin"></i>

@@ -7,18 +7,32 @@
         <div style="height: 50px"></div>
         <div class="featured-detail-content">
             <div class="" ref="fDetail">
-                <div class="user-cell" @click="test('1')">
-                    <img src="../../assets/img/fixed4.jpg">
-                    <span class="user-name">用户名</span>
+                <div class="user-cell" @click="viewOther">
+<!--                    <img src="../../assets/img/fixed4.jpg">-->
+                    <van-image
+                        lazy-load
+                        fit="cover"
+                        :src="allData.userInfo.avatar"
+                    >
+                        <template v-slot:error>
+                            <img style="width: 34px;height: 34px" src="../../assets/img/default-avatar.png" alt="">
+                        </template>
+                    </van-image>
+                    <span class="user-name">{{nickName}}</span>
                     <div class="user-info">
-                        <span class="time-span">17小时前</span>&nbsp;
+                        <span class="time-span">{{allData.createTime}}</span>&nbsp;
                     </div>
-                    <div class="attention-btn" @click.stop="test('2')">
-                        已关注
+                    <div v-if="isLogin">
+                        <div class="attention-btn" @click.stop="clickAttention(1)" v-if="!isAttention">
+                            未关注
+                        </div>
+                        <div class="attention-btn" @click.stop="clickAttention(2)" v-if="isAttention">
+                            已关注
+                        </div>
                     </div>
                 </div>
                 <div class="desc-cell">
-                    经验加三，告辞。经验加三，告辞。经验加三，告辞。经验加三，告辞。经验加三，告辞。经验加三，告辞。
+                    {{allData.content}}
                 </div>
                 <div class="img-cell clearfix">
                     <ul>
@@ -29,7 +43,7 @@
                                 height="100%"
                                 lazy-load
                                 fit="cover"
-                                :src="item.imgSrc"
+                                :src="item.url"
                             />
                         </li>
                     </ul>
@@ -39,175 +53,74 @@
             <div class="like-comment-tab">
                 <div class="tab11">
                     <van-tabs v-model="active" sticky offset-top="50" @scroll="tabScroll">
-                        <van-tab title="赞 55">
-                            <div class="like-tab-item">
+                        <van-tab :title="likeNum">
+                            <div class="" v-if="noLike" style="color: #888; background-color:#fff; text-align: center;font-size: 12px">
+                                <br><br><br><br>
+                                暂无任何点赞 o(╥﹏╥)o
+                            </div>
+                            <div class="like-tab-item" v-if="!noLike" v-for="(item,index) in likeData">
                                 <div class="like-user-cell">
-                                    <div class="like-user-avatar">
+                                    <div class="like-user-avatar" >
                                         <van-image
                                             round
                                             width="100%"
                                             height="100%"
-                                            src="https://img.yzcdn.cn/vant/cat.jpeg"
+                                            :src="item.user.avatar"
                                             lazy-load
                                             fit="cover"
                                         />
                                     </div>
                                     <div class="like-user-name">
-                                        用户名用户名
-                                    </div>
-                                </div>
-                                <div class="like-user-cell">
-                                    <div class="like-user-avatar">
-                                        <van-image
-                                            round
-                                            width="100%"
-                                            height="100%"
-                                            src="https://img.yzcdn.cn/vant/cat.jpeg"
-                                            lazy-load
-                                            fit="cover"
-                                        />
-                                    </div>
-                                    <div class="like-user-name">
-                                        用户名用户名
-                                    </div>
-                                </div>
-                                <div class="like-user-cell">
-                                    <div class="like-user-avatar">
-                                        <van-image
-                                            round
-                                            width="100%"
-                                            height="100%"
-                                            src="https://img.yzcdn.cn/vant/cat.jpeg"
-                                            lazy-load
-                                            fit="cover"
-                                        />
-                                    </div>
-                                    <div class="like-user-name">
-                                        用户名用户名
-                                    </div>
-                                </div>
-                                <div class="like-user-cell">
-                                    <div class="like-user-avatar">
-                                        <van-image
-                                            round
-                                            width="100%"
-                                            height="100%"
-                                            src="https://img.yzcdn.cn/vant/cat.jpeg"
-                                            lazy-load
-                                            fit="cover"
-                                        />
-                                    </div>
-                                    <div class="like-user-name">
-                                        用户名用户名
+                                        {{item.user.nickName}}
                                     </div>
                                 </div>
                             </div>
                         </van-tab>
-                        <van-tab title="回复 178">
-                            <div class="comment-tab-item" ref="commentTab" id="commentTab">
-                                <div class="msg-card">
-                                    <div class="msg-user">
-                                        <img src="../../assets/img/fixed4.jpg" alt=""><span
-                                        class="msg-user-name">用户名用户1</span>
-                                        <span class="msg-time">4天前</span>
+                        <van-tab :title="commentNum">
+                            <div class="" v-if="noComment" style="color: #888; background-color:#fff; text-align: center;font-size: 12px">
+                                <br><br><br><br>
+                                暂无任何评论 o(╥﹏╥)o
+                            </div>
+
+                            <div class="comment-tab-item" ref="commentTab" id="commentTab" v-if="!noComment">
+                                <div class="msg-card" v-for="(item,index) in commentData">
+                                    <div class="msg-user" >
+<!--                                        <img src="../../assets/img/fixed4.jpg" alt="">-->
+                                        <van-image
+                                            lazy-load
+                                            fit="cover"
+                                            :src="item.sender.avatar"
+                                        >
+                                            <template v-slot:error>
+                                                <img style="width: 30px;height: 30px" src="../../assets/img/default-avatar.png" alt="">
+                                            </template>
+                                        </van-image>
+                                        <span class="msg-user-name">{{item.sender.nickName}}</span>
+                                        <span class="msg-time">{{item.createTime}}</span>
                                     </div>
                                     <div class="msg-info">
-                                        @用户名用户名
-                                        <p>12312312321</p>
-                                    </div>
-                                </div>
-                                <div class="msg-card">
-                                    <div class="msg-user">
-                                        <img src="../../assets/img/fixed4.jpg" alt=""><span
-                                        class="msg-user-name">用户名用户1</span>
-                                        <span class="msg-time">4天前</span>
-                                    </div>
-                                    <div class="msg-info">
-                                        @用户名用户名
-                                        <p>12312312321</p>
-                                    </div>
-                                </div>
-                                <div class="msg-card">
-                                    <div class="msg-user">
-                                        <img src="../../assets/img/fixed4.jpg" alt=""><span
-                                        class="msg-user-name">用户名用户1</span>
-                                        <span class="msg-time">4天前</span>
-                                    </div>
-                                    <div class="msg-info">
-                                        @用户名用户名
-                                        <p>12312312321</p>
-                                    </div>
-                                </div>
-                                <div class="msg-card">
-                                    <div class="msg-user">
-                                        <img src="../../assets/img/fixed4.jpg" alt=""><span
-                                        class="msg-user-name">用户名用户1</span>
-                                        <span class="msg-time">4天前</span>
-                                    </div>
-                                    <div class="msg-info">
-                                        @用户名用户名
-                                        <p>12312312321</p>
-                                    </div>
-                                </div>
-                                <div class="msg-card">
-                                    <div class="msg-user">
-                                        <img src="../../assets/img/fixed4.jpg" alt=""><span
-                                        class="msg-user-name">用户名用户1</span>
-                                        <span class="msg-time">4天前</span>
-                                    </div>
-                                    <div class="msg-info">
-                                        @用户名用户名
-                                        <p>12312312321</p>
-                                    </div>
-                                </div>
-                                <div class="msg-card">
-                                    <div class="msg-user">
-                                        <img src="../../assets/img/fixed4.jpg" alt=""><span
-                                        class="msg-user-name">用户名用户1</span>
-                                        <span class="msg-time">4天前</span>
-                                    </div>
-                                    <div class="msg-info">
-                                        @用户名用户名
-                                        <p>12312312321</p>
-                                    </div>
-                                </div>
-                                <div class="msg-card">
-                                    <div class="msg-user">
-                                        <img src="../../assets/img/fixed4.jpg" alt=""><span
-                                        class="msg-user-name">用户名用户1</span>
-                                        <span class="msg-time">4天前</span>
-                                    </div>
-                                    <div class="msg-info">
-                                        @用户名用户名
-                                        <p>12312312321</p>
-                                    </div>
-                                </div>
-                                <div class="msg-card">
-                                    <div class="msg-user">
-                                        <img src="../../assets/img/fixed4.jpg" alt=""><span
-                                        class="msg-user-name">用户名用户1</span>
-                                        <span class="msg-time">4天前</span>
-                                    </div>
-                                    <div class="msg-info">
-                                        @用户名用户名
-                                        <p>12312312321</p>
+                                        @ {{nickName}}
+                                        <p>{{item.comment}}</p>
                                     </div>
                                 </div>
                             </div>
+                            <div style="height: 50px;background-color:#fff;"></div>
                         </van-tab>
                     </van-tabs>
                 </div>
-                <span class="viewNUm" ref="viewNum" :class="{'scroll-view-num':isScTop}">浏览</span>
+                <span class="viewNUm" ref="viewNum" :class="{'scroll-view-num':isScTop}"></span>
             </div>
         </div>
         <div class="featured-detail-bottom" v-show="!isWriteComment">
-            <i class="iconfont albumpinglun2 wc-i" @click="writeComment"></i><span class="wc-span" @click="writeComment">写回复</span>
-            <i class="iconfont albumpinglun1 c-i" @click="goAnchor"></i><span class="c-num">12</span>
-            <i class="iconfont albumz-like l-i"></i><span class="l-num">12</span>
+            <i class="iconfont albumpinglun2 wc-i" @click="writeComment"></i><span class="wc-span" @click="writeComment">写评论</span>
+            <i class="iconfont albumpinglun1 c-i" @click="goAnchor"></i><span class="c-num">{{allData.commentNum}}</span>
+            <i class="iconfont albumz-like l-i" v-if="!isLiked" @click="like(true)"></i>
+            <i class="iconfont albumdianzan1 l-i" v-if="isLiked" style="color: #1989fa" @click="false"></i>
+            <span class="l-num">{{allData.likeNum}}</span>
         </div>
         <van-image-preview v-model="seePhoto" :images="imgSrcArr" @change="onChange" @closed="onClose" closeable
                            swipe-duration="300">
-            <template v-slot:index>{{ index }}/{{photoArray.length}}</template>
+<!--            <template v-slot:index>{{ index }}/{{photoArray.length}}</template>-->
             <template v-slot:cover>
                 <div class="viewPhoto-bg" :style="bacImage">
                 </div>
@@ -220,14 +133,14 @@
             :style="{ height: '220px' }"
         >
             <div style="height:26px;line-height: 26px;width: 100%;margin-top:20px;font-size: 13px">
-                <span style="float: left;margin-left: 20px;color: #666">回复</span>
+                <span style="float: left;margin-left: 20px;color: #666">评论</span>
                 <span style="float: right;margin-right: 20px;color: #1989fa" @click="submitComment">发布</span>
             </div>
             <van-field
                 v-model="message"
                 rows="5"
                 type="textarea"
-                placeholder="@用户名用户名用户名："
+                :placeholder="placeholder"
                 show-word-limit
             />
         </van-popup>
@@ -235,48 +148,13 @@
 </template>
 
 <script>
+    import {clickLike, getAttention, getComment, setComment,getLike} from "../../api/getData";
+
     export default {
         name: "FeaturedDetail",
         data() {
             return {
-                photoArray: [
-                    {
-                        imgSrc: require("./../../assets/img/fixed2.jpg"),
-                        id: 1
-                    },
-                    {
-                        imgSrc: require("./../../assets/img/fixed4.jpg"),
-                        id: 2
-                    },
-                    {
-                        imgSrc: require("./../../assets/img/fixed2.jpg"),
-                        id: 3
-                    },
-                    {
-                        imgSrc: 'http://39.105.137.236/group1/M00/00/00/J2mJ7F6kAHuANI8kAAZzxYDyrIU172.jpg',
-                        id: 4
-                    },
-                    {
-                        imgSrc: require("./../../assets/img/fixed2.jpg"),
-                        id: 5
-                    },
-                    {
-                        imgSrc: require("./../../assets/img/fixed4.jpg"),
-                        id: 6
-                    },
-                    {
-                        imgSrc: 'http://39.105.137.236/group1/M00/00/00/J2mJ7F6kAHuANI8kAAZzxYDyrIU172.jpg',
-                        id: 7
-                    },
-                    {
-                        imgSrc: require("./../../assets/img/fixed2.jpg"),
-                        id: 8
-                    },
-                    {
-                        imgSrc: 'http://39.105.137.236/group1/M00/00/00/J2mJ7F6kAHuANI8kAAZzxYDyrIU172.jpg',
-                        id: 9
-                    }
-                ],
+                photoArray: [],
                 active: 1,
                 imgSrcArr: [],
                 idArr: [],
@@ -288,13 +166,122 @@
                 isScTop: false,
                 timer:"",
                 isWriteComment:false,
-                message:""
+                message:"",
+                allData:"",
+                nickName:"",
+                likeNum:'赞 ',
+                commentNum:'评论 ',
+                browseNum:'评论 ',
+                isAttention:false,
+                isLiked:false,
+                isLogin:false,
+                placeholder:"",
+                commentData:[],
+                likeData:[],
+                noComment:false,
+                noLike:false
             }
         },
+        mounted(){
+            if(localStorage.getItem('access_token')) {
+                this.isLogin = true
+            }else{
+                this.isLogin = false;
+            }
+            this.allData = this.$route.query.data;
+            console.log(this.allData)
+            this.nickName = this.allData.userInfo.nickName
+            this.placeholder = "@"+this.nickName;
+            this.likeNum+=this.allData.likeNum
+            this.commentNum+=this.allData.commentNum
+            this.browseNum+=this.allData.browseNum
+            this.photoArray = this.allData.imageList
+            this.isAttention = this.allData.isAttention
+            this.isLiked = this.allData.isLiked
+            getComment(this.allData.id).then(res=>{
+                if(res.data.success) {
+                    let rows = res.data.object.rows;
+                    if(rows.length == 0) {
+                        this.noComment = true
+                    }
+                    for(let i=0;i<rows.length;i++) {
+                        this.commentData.push(rows[i])
+                    }
+                }
+            })
+            getLike(this.allData.id).then(res=>{
+                if(res.data.success) {
+                    let rows = res.data.object.rows;
+                    if(rows.length == 0) {
+                        this.noLike = true
+                    }
+                    for(let i=0;i<rows.length;i++) {
+                        this.likeData.push(rows[i])
+                    }
+                }
+            })
+            console.log(this.commentData)
+        },
+
         beforeDestroy() {
             clearInterval(this.timer);
         },
         methods: {
+            viewOther(){
+                console.log(this.allData.userInfo.id)
+                this.$router.push({
+                    path:'/other',
+                    query:{
+                        data:this.allData.userInfo
+                    }
+                })
+            },
+            clickAttention(type){
+
+                let url ="";
+                let method = ""
+                console.log(type)
+                if(type == '1') {  //关注
+                    url = '/user/attention/add';
+                    method = 'post'
+                }else{
+                    url='/user/attention/delete';
+                    method:'delete'
+                }
+                debugger;
+                setAttention(this.userInfo.id,url,method).then(res=>{
+                    if(res.data.success) {
+                        this.isAttention = true;
+                        this.$toast({
+                            message:"已关注",
+                            position:"bottom"
+                        });
+                    }
+                })
+            },
+            like(status) {
+                let url = '';
+                let method = "";
+                if(status) {
+                    url = '/album/likeRecord/clickLike';
+                    method="post"
+                }else{
+                    url ='/album/likeRecord/cancelLike';
+                    method='delete'
+                }
+                clickLike(this.id,url,method).then(res=>{
+                    if(res.data.success) {
+                        if(res.data.object == "点赞成功") {
+                            this.isLiked = true;
+                            this.likeNum++;
+                        }else{
+                            this.isLiked = false;
+                            this.likeNum--;
+                        }
+                    }
+                })
+
+            },
             viewPhoto(index, id) {
                 let prevArr = [];
                 let nextArr = [];
@@ -308,7 +295,7 @@
                 }
                 nextArr.push.apply(nextArr, prevArr);
                 for (let i = 0; i < nextArr.length; i++) {
-                    this.imgSrcArr.push(nextArr[i].imgSrc);
+                    this.imgSrcArr.push(nextArr[i].url);
                     this.idArr.push(nextArr[i].id)
                 }
                 this.bacImage.backgroundImage = "url(" + this.imgSrcArr[id] + ") "
@@ -322,37 +309,37 @@
                 this.imgSrcArr = [];
             },
             goAnchor() {
-                let top = document.documentElement.scrollTop;
-                let height = this.$refs.fDetail.offsetHeight;
+                // let top = document.documentElement.scrollTop;
+                // let height = this.$refs.fDetail.offsetHeight;
 
-
-                if(this.active == 0) {
-                    console.log("121")
-                    this.active = 1;
-                    setTimeout(() =>{
-                        let timeCount =0;
-                        this.timer = setInterval(()=>{
-                            timeCount++;
-                            let scrollPosition = top - (top-height-20)/30*timeCount;
-                            document.documentElement.scrollTop = scrollPosition;
-                            console.log(timeCount)
-                            if(timeCount == 30) {
-                                clearInterval(this.timer);
-                            }
-                        }, 1);
-                    },300);
-                }else{
-                    let timeCount =0;
-                    this.timer = setInterval(()=>{
-                        timeCount++;
-                        let scrollPosition = top - (top-height-20)/30*timeCount;
-                        document.documentElement.scrollTop = scrollPosition;
-                        console.log(timeCount)
-                        if(timeCount == 30) {
-                            clearInterval(this.timer);
-                        }
-                    }, 1);
-                }
+                //
+                // if(this.active == 0) {
+                //     console.log("121")
+                //     this.active = 1;
+                //     setTimeout(() =>{
+                //         let timeCount =0;
+                //         this.timer = setInterval(()=>{
+                //             timeCount++;
+                //             let scrollPosition = top - (top-height-20)/30*timeCount;
+                //             document.documentElement.scrollTop = scrollPosition;
+                //             console.log(timeCount)
+                //             if(timeCount == 30) {
+                //                 clearInterval(this.timer);
+                //             }
+                //         }, 1);
+                //     },300);
+                // }else{
+                //     let timeCount =0;
+                //     this.timer = setInterval(()=>{
+                //         timeCount++;
+                //         let scrollPosition = top - (top-height-20)/30*timeCount;
+                //         document.documentElement.scrollTop = scrollPosition;
+                //         console.log(timeCount)
+                //         if(timeCount == 30) {
+                //             clearInterval(this.timer);
+                //         }
+                //     }, 1);
+                // }
             },
             tabScroll(back) {
                 if (back.isFixed) {
@@ -366,6 +353,7 @@
             },
             submitComment() {
                 this.isWriteComment = false;
+                setComment(this.allData.id,this.message,this.allData.userInfo.id)
             }
         }
     }
@@ -373,6 +361,12 @@
 
 <style scoped lang="scss">
     .featured-detail {
+        .van-image-preview__close-icon {
+            z-index: 999999;
+        }
+        .van-image-preview__index {
+            z-index: 999999;
+        }
         position: absolute;
 
         > > > .van-image-preview__overlay {
@@ -437,13 +431,14 @@
                 width: 100%;
                 transition: linear 0.1s;
 
-                img {
+                .van-image {
                     height: 34px;
                     width: 34px;
                     border-radius: 50%;
                     position: absolute;
                     left: 14px;
-                    top: 14px;
+                    top: 10px;
+                    overflow: hidden;
                 }
 
                 .user-name {
@@ -603,13 +598,14 @@
                         height: 40px;
                         width: 100%;
 
-                        img {
+                        .van-image {
                             width: 30px;
                             height: 30px;
                             border-radius: 50%;
                             object-fit: cover;
                             position: absolute;
                             top: 5px;
+                            overflow: hidden;
                         }
 
                         .msg-user-name {

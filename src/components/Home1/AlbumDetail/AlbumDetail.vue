@@ -9,25 +9,35 @@
         <div class="edit-title1" v-if="isEdit"></div>
 
         <div class="album-title" v-if="!isEdit">
-            <img src="../../../assets/img/fixed1.jpg">
+<!--            <img src="../../../assets/img/fixed1.jpg">-->
+            <van-image
+                width="100%"
+                height="32vh"
+                lazy-load
+                fit="cover"
+                :src="bgSrc"
+            >
+                <template v-slot:error>{{bgTip}}</template>
+            </van-image>
+
             <div class="detail-header" :class="{bgc:isBgc}">
                 <div class="back-btn" @click="goPath('/home')" :class="{isBlack:isBgc}">
                     <i class="iconfont albumzuojiantou"></i>
                 </div>
                 <i :class="{isBlack:isBgc}" class="iconfont albumyoucecaidan menu-btn" @click="showMnuPopup" v-if="!isEdit"></i>
-                <i class="iconfont albumcamera up-btn-bgc" v-if="isBgc"></i>
+                <i class="iconfont albumcamera up-btn-bgc" v-if="isBgc" @click="uploadPic"></i>
             </div>
 
             <div class="title-bottom">
-                <span>相册标题相册标题</span>
-                <span>共1212张照片</span>
+                <span>{{title}}</span>
+                <span>共{{totalCount}}张照片</span>
                 <div class="bottom-right">
-                    <i class="iconfont albumicon"></i><span>浏览量 77</span>
+<!--                    <i class="iconfont albumicon"></i><span>浏览量 77</span>-->
                 </div>
             </div>
         </div>
         <div class="up-btn" v-if="!isEdit">
-            <van-button icon="1" type="info">上传图片</van-button>
+            <van-button icon="1" type="info" @click="uploadPic">上传图片</van-button>
             <i class="iconfont albumcamera"></i>
         </div>
         <div class=" clearfix" :class="{bigview:isBigView,photolist:!isBigView}">
@@ -39,8 +49,10 @@
                         height="100%"
                         lazy-load
                         fit="cover"
-                        :src="item.imgSrc"
-                    />
+                        :src="item.url"
+                    >
+                        <template v-slot:loading><van-loading /></template>
+                    </van-image>
                     <div class="checked" v-if="chooseAfterValue.indexOf( item.id )!=-1">
                         <i class="van-icon van-icon-success"></i>
                     </div>
@@ -48,8 +60,11 @@
             </ul>
         </div>
 
-        <div class="detail-bottom">
+        <div class="detail-bottom" v-show="noPic">
             <span>------&nbsp;&nbsp;已显示全部&nbsp;&nbsp;------</span>
+        </div>
+        <div class="detail-bottom" v-show="!noPic">
+            <span>&nbsp;<van-loading color="#1989fa" /> 加载中...</span>
         </div>
 
         <div class="manage-photo" v-if="isEdit">
@@ -69,107 +84,26 @@
             <van-cell title="大图浏览" is-link icon="expand-o" @click="bigView" v-if="!isBigView"/>
             <van-cell title="小图浏览" is-link icon="photo-o" @click="bigView" v-else/>
         </van-popup>
-        <van-image-preview v-model="seePhoto" :images="imgSrcArr" @change="onChange" @close="onClose" closeable >
-            <template v-slot:index>第{{ index }}页</template>
+        <van-image-preview v-model="seePhoto" :images="imgSrcArr" @change="onChange" @close="onClose"  >
+<!--            <template v-slot:index>第{{ index }}页</template>-->
             <template v-slot:cover>
                 <div class="viewPhoto-bg" :style="bacImage">
                 </div>
+                <div style="font-size: 12px; position: fixed;top: 12px;right: 10px; width: 60px;height: 20px;z-index: 999999;color: #00ccff" @click="setBg">设为背景</div>
             </template>
         </van-image-preview>
+<!--        <div class="van-overlay"></div>-->
     </div>
 </template>
 
 <script>
+    import {deletePhoto,seeAlbumInfo,updateAlbum} from "../../../api/getData";
+
     export default {
         name: "AlbumDetail",
         data() {
             return {
-                photoArray:[
-                    {
-                        imgSrc: 'http://39.105.137.236/group1/M00/00/00/J2mJ7F6kAHuANI8kAAZzxYDyrIU172.jpg',
-                        id:1
-                    },
-                    {
-                        imgSrc: 'http://39.105.137.236/group1/M00/00/00/J2mJ7F6kAHuANI8kAAZzxYDyrIU172.jpg',
-                        id:2
-                    },
-                    {
-                        imgSrc: 'http://39.105.137.236/group1/M00/00/00/J2mJ7F6kAHuANI8kAAZzxYDyrIU172.jpg',
-                        id:3
-                    },
-                    {
-                        imgSrc: 'http://39.105.137.236/group1/M00/00/00/J2mJ7F6kAHuANI8kAAZzxYDyrIU172.jpg',
-                        id:4
-                    },
-                    {
-                        imgSrc: 'http://39.105.137.236/group1/M00/00/00/J2mJ7F6kAHuANI8kAAZzxYDyrIU172.jpg',
-                        id:5
-                    },
-                    {
-                        imgSrc: 'http://39.105.137.236/group1/M00/00/00/J2mJ7F6kAHuANI8kAAZzxYDyrIU172.jpg',
-                        id:6
-                    },
-                    {
-                        imgSrc: 'http://39.105.137.236/group1/M00/00/00/J2mJ7F6kAHuANI8kAAZzxYDyrIU172.jpg',
-                        id:7
-                    },
-                    {
-                        imgSrc: 'http://39.105.137.236/group1/M00/00/00/J2mJ7F6kAHuANI8kAAZzxYDyrIU172.jpg',
-                        id:8
-                    },
-                    {
-                        imgSrc: 'http://39.105.137.236/group1/M00/00/00/J2mJ7F6kAHuANI8kAAZzxYDyrIU172.jpg',
-                        id:9
-                    },
-                    {
-                        imgSrc: 'http://39.105.137.236/group1/M00/00/00/J2mJ7F6kAHuANI8kAAZzxYDyrIU172.jpg',
-                        id:10
-                    },
-                    {
-                        imgSrc: 'http://39.105.137.236/group1/M00/00/00/J2mJ7F6kAHuANI8kAAZzxYDyrIU172.jpg',
-                        id:11
-                    },
-                    {
-                        imgSrc: 'http://39.105.137.236/group1/M00/00/00/J2mJ7F6kAHuANI8kAAZzxYDyrIU172.jpg',
-                        id:12
-                    },
-                    {
-                        imgSrc: 'http://39.105.137.236/group1/M00/00/00/J2mJ7F6kAHuANI8kAAZzxYDyrIU172.jpg',
-                        id:13
-                    },
-                    {
-                        imgSrc: 'http://39.105.137.236/group1/M00/00/00/J2mJ7F6kAHuANI8kAAZzxYDyrIU172.jpg',
-                        id:14
-                    },
-                    {
-                        imgSrc: 'http://39.105.137.236/group1/M00/00/00/J2mJ7F6kAHuANI8kAAZzxYDyrIU172.jpg',
-                        id:15
-                    },
-                    {
-                        imgSrc: 'http://39.105.137.236/group1/M00/00/00/J2mJ7F6kAHuANI8kAAZzxYDyrIU172.jpg',
-                        id:16
-                    },
-                    {
-                        imgSrc: 'http://39.105.137.236/group1/M00/00/00/J2mJ7F6kAHuANI8kAAZzxYDyrIU172.jpg',
-                        id:17
-                    },
-                    {
-                        imgSrc: 'http://39.105.137.236/group1/M00/00/00/J2mJ7F6kAHuANI8kAAZzxYDyrIU172.jpg',
-                        id:18
-                    },
-                    {
-                        imgSrc: 'http://39.105.137.236/group1/M00/00/00/J2mJ7F6kAHuANI8kAAZzxYDyrIU172.jpg',
-                        id:19
-                    },
-                    {
-                        imgSrc: 'http://39.105.137.236/group1/M00/00/00/J2mJ7F6kAHuANI8kAAZzxYDyrIU172.jpg',
-                        id:20
-                    },
-                    {
-                        imgSrc: 'http://39.105.137.236/group1/M00/00/00/J2mJ7F6kAHuANI8kAAZzxYDyrIU172.jpg',
-                        id:21
-                    },
-                ],
+                photoArray:[],
                 showMenu:false,
                 isEdit:false,
                 chooseAfterValue:[],
@@ -179,30 +113,120 @@
                 seePhoto:false,
                 imgSrcArr:[],
                 index: 1,
+                title:"",
                 bacImage: {
                     backgroundImage: "",
                 },
+                id:"",
+                totalCount:'',
+                pageCount:1,
+                isBottom:0,
+                noPic:false,
+                loading:false,
+                visiblePermissionId:'',
+                bgSrc:"",
+                bgUrl:"",
+                bgTip:""
             }
         },
         mounted() {
             window.addEventListener('scroll',this.headerBgc);
+            this.title = this.$route.query.title;
+            this.visiblePermissionId = this.$route.query.visiblePermissionId;
+            this.bgSrc = this.$route.query.background;
+            this.getPhoto();
+            this.id = this.$route.query.id
+            // seeAlbumInfo(id)
         },
         methods: {
+            setBg(){
+                let formData = {};
+                formData.id = this.id;
+                formData.title = this.title;
+                formData.visiblePermissionId = this.visiblePermissionId;
+                formData.background = this.bacImage.backgroundImage.toString();
+                updateAlbum(formData).then(res=>{
+                    if(res.data.success) {
+                        this.$toast({
+                            message:"设置成功",
+                            position:"bottom"
+                        });
+                        this.bgSrc = formData.background.slice(4,-2);
+                    }else{
+                        this.$toast({
+                            message:res.data.message,
+                            position:"bottom"
+                        });
+                    }
+                })
+            },
+            uploadPic() {
+                let data = {};
+                data.id = this.id;
+                data.name = this.title;
+                data.type = 'detailUpload';
+                data.background = this.bgSrc
+                this.$router.push({
+                    path:"/upload",
+                    query: {
+                        data: data,
+                    }
+                })
+            },
+            getPhoto(pageNo){
+                let id = this.$route.query.id;
+                this.loading = true;
+                seeAlbumInfo(id,pageNo).then(res=>{
+                    this.totalCount = res.data.object.totalCount;
+
+                    let rows = res.data.object.rows;
+                    for(let i=0;i<rows.length;i++) {
+                        this.photoArray.push(rows[i]);
+                    }
+                    if(res.data.object.totalCount == 0) {
+                        this.bgTip = "空空如也 o(╥﹏╥)o"
+                    }else {
+                        this.bgTip = "暂无封面 (*╹▽╹*)"
+                    }
+                    if(res.data.object.totalCount <= 15) {
+                        this.noPic = true
+                    }
+                    this.isBottom++;
+                    if(rows.length == 0) {
+                        this.noPic = true;
+                    }
+                    this.loading = false;
+                })
+            },
             headerBgc() {
                 var scrollTop = document.body.scrollTop || document.documentElement.scrollTop;
-                var clientHeight=document.documentElement.clientHeight;
+                var clientHeight=document.documentElement.clientHeight || document.body.clientHeight;
+                var windowHeight =  document.documentElement.scrollHeight ||document.body.scrollHeight;
                 //滚动条的高度>可视区的高度
                 if(scrollTop>(clientHeight*0.32-120)){
                     this.isBgc = true;
                 }else{
                     this.isBgc = false;
                 }
+                // console.log(windowHeight +"----"+ (scrollTop+clientHeight))
+                if((windowHeight-20) < scrollTop+clientHeight){
+                    if(this.pageCount == this.isBottom) {
+                        this.pageCount++;
+                        if(!this.noPic) {
+                            this.getPhoto(this.pageCount);
+                        }
+                    }
+                }
             },
             editAlbum() {
                 this.$router.push({
                     path:'/edit_album',
                     query:{
-                        type:'edit'
+                        type:'edit',
+                        id:this.id,
+                        title:this.title,
+                        visiblePermissionId:this.visiblePermissionId,
+                        background:this.bgSrc
                     }
                 })
             },
@@ -218,11 +242,66 @@
                 this.showMenu = false;
             },
             movePhoto() {
-                this.$router.push('/move_photo');
+                if(this.chooseAfterValue.length == 0) {
+                    this.$toast({
+                        message:"请先选择照片!",
+                        position:"bottom"
+                    });
+                    return false;
+                }
+                this.$router.push({
+                    path:'/move_photo',
+                    query:{
+                        type:'move',
+                        id:this.id,
+                        title:this.title,
+                        visiblePermissionId:this.visiblePermissionId,
+                        chooseAfterValue:this.chooseAfterValue
+                    }
+                })
             },
             delPhoto() {
-                console.log(this.chooseAfterValue)
-                alert("删除"+this.chooseAfterValue.length)
+
+                if(this.chooseAfterValue.length == 0) {
+                    this.$toast({
+                        message:"请先选择照片!",
+                        position:"bottom"
+                    });
+                    return false;
+                }
+                let that =this;
+                this.$dialog.alert({
+                    message: '是否删除'+this.chooseAfterValue.length+"张图片？",
+                    showCancelButton:true,
+                }).then(()=>{
+                    let formData = {};
+
+                    formData.albumId = this.id;
+                    formData.imageIds = this.chooseAfterValue;
+                    deletePhoto(formData).then(res=>{
+                        if(res.data.success) {
+                            for(let i=0;i<this.chooseAfterValue.length;i++) {
+                                for(let j=0;j<this.photoArray.length;j++) {
+                                    if(this.chooseAfterValue[i] == this.photoArray[j].id) {
+                                        this.photoArray.splice(j,1);
+                                    }
+                                }
+                            }
+                            this.$toast({
+                                message:"删除成功!",
+                                position:"bottom"
+                            });
+                        }else{
+                            this.$toast({
+                                message:"删除失败!",
+                                position:"bottom"
+                            });
+                        }
+                    })
+
+                }).catch(()=>{
+                });
+
             },
             editCancel() {
                 this.isEdit = false;
@@ -242,7 +321,7 @@
                     }
                     nextArr.push.apply(nextArr, prevArr);
                     for (let i = 0; i < nextArr.length; i++) {
-                        this.imgSrcArr.push(nextArr[i].imgSrc);
+                        this.imgSrcArr.push(nextArr[i].url);
                         this.idArr.push(nextArr[i].id)
                     }
                     this.bacImage.backgroundImage = "url(" + this.imgSrcArr[id] + ") "
@@ -281,7 +360,9 @@
 
 <style scoped lang="scss">
 .album-detail {
-
+    /*>>>.van-overlay {*/
+    /*    background-color: rgba(0,0,0,0);*/
+    /*}*/
     >>>.van-cell {
         padding: 16px 16px;
     }
@@ -356,10 +437,15 @@
     }
     .album-title {
         position: relative;
-        img {
+        >>>.van-image__error, .van-image__loading {
+            filter: brightness(0.8);
+        }
+        >>>.van-image__img {
             width: 100%;
             height: 32vh;
+            min-height: 100px;
             object-fit: cover;
+            filter: brightness(0.85);
         }
         .bgc {
             background-color: #fff;

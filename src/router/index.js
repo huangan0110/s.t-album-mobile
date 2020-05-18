@@ -20,6 +20,8 @@ import CommentNotice from "../components/Notice/NoticeType/CommentNotice";
 import LikeNotice from "../components/Notice/NoticeType/LikeNotice";
 import SysNotice from "../components/Notice/NoticeType/SysNotice";
 import FeaturedDetail from "../components/Common/FeaturedDetail";
+import Register from "../components/Login/Register";
+import Other from "../components/Mine/Other";
 
 
 Vue.use(Router)
@@ -47,6 +49,15 @@ export default new Router({
             path: '/email-login',
             name: 'EmailLogin',
             component: EmailLogin,
+            meta: {
+                showTabbar: false,
+                index: 2
+            }
+        },
+        {
+            path: '/register',
+            name: 'Register',
+            component: Register,
             meta: {
                 showTabbar: false,
                 index: 2
@@ -165,6 +176,14 @@ export default new Router({
             component: Mine,
             meta: {
                 showTabbar: true,
+            }
+        },
+        {
+            path: '/other',
+            name: 'Other',
+            component: Other,
+            meta: {
+                showTabbar: false,
             }
         },
         {

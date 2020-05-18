@@ -1,10 +1,10 @@
 <template>
     <div class="home">
-        <div class="home-header">
+        <div class="home-header" v-if="isLogin">
             <span>我的相册</span>
 <!--            <i class="iconfont albumsousuo4"></i>-->
         </div>
-        <div class="home-content clearfix">
+        <div class="home-content clearfix" v-if="isLogin">
             <ul>
                 <li>
                     <div class="add-album" @click="addAlbum">
@@ -14,17 +14,24 @@
                     </div>
                 </li>
                 <li v-for="(item,index) in albumData" :key="index">
-                    <album-card :imgSrc="item.imgSrc" :title="item.title" :photoNum="item.photoNum"></album-card>
+                    <album-card :imgSrc="item.background" :title="item.name" :id="item.id" :photoNum="item.imageNum" :visiblePermissionId="item.visiblePermissionId"></album-card>
                 </li>
             </ul>
         </div>
-        <div class="home-bottom">
-            <span>————————&nbsp;&nbsp;&nbsp;已展示全部&nbsp;&nbsp;&nbsp;————————</span>
+        <div class="home-bottom" v-if="albumData.length!=0">
+        </div>
+        <div v-if="!isLogin" class="noLogin">
+            <van-button type="primary" size="normal" @click="$router.push('email-login')">登录</van-button>
+        </div>
+        <div v-if="!isLogin" class="noLogin">
+            <van-button type="primary" size="normal" @click="$router.push('email-login')">登录</van-button>
         </div>
     </div>
+
 </template>
 
 <script>
+    import {seeAlbum} from "../../api/getData";
     import AlbumCard from "./AlbumCard";
     export default {
         name: "Home",
@@ -33,49 +40,20 @@
         },
         data() {
             return {
-                albumData:[
-                    {
-                        imgSrc: require("./../../assets/img/fixed2.jpg"),
-                        title: "风光",
-                        photoNum:"12"
-                    },
-                    {
-                        imgSrc: require("./../../assets/img/fixed4.jpg"),
-                        title: "风光",
-                        photoNum:"12"
-                    },
-                    {
-                        imgSrc: require("./../../assets/img/fixed2.jpg"),
-                        title: "风光",
-                        photoNum:"12"
-                    },
-                    {
-                        imgSrc: require("./../../assets/img/fixed4.jpg"),
-                        title: "风光",
-                        photoNum:"12"
-                    },
-                    {
-                        imgSrc: require("./../../assets/img/fixed2.jpg"),
-                        title: "风光",
-                        photoNum:"12"
-                    },
-                    {
-                        imgSrc: require("./../../assets/img/fixed4.jpg"),
-                        title: "风光",
-                        photoNum:"12"
-                    },
-                    {
-                        imgSrc: require("./../../assets/img/fixed2.jpg"),
-                        title: "风光",
-                        photoNum:"12"
-                    },
-                    {
-                        imgSrc: require("./../../assets/img/fixed4.jpg"),
-                        title: "风光",
-                        photoNum:"12"
-                    },
-                ]
+                albumData:[],
+                isLogin:false
             }
+        },
+        mounted() {
+            let s = localStorage.getItem('access_token');
+            if(s == null) {
+                this.isLogin = false;
+            }else{
+                this.isLogin = true;
+            }
+            seeAlbum().then(res => {
+                this.albumData = res.data.object.rows;
+            })
         },
         methods:{
             addAlbum() {
@@ -91,6 +69,17 @@
 </script>
 
 <style scoped lang="scss">
+    .noLogin {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        >>>.van-button {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 300px;
+        }
+    }
     .home {
         .home-header {
             height: 50px;
@@ -98,7 +87,7 @@
             border-bottom: 1px solid #eee;
             box-shadow: 0px 8px 25px -22px #5e5e5e;
             position: fixed;
-            top: 0;
+            top: 20px;
             z-index: 9;
             background-color: #fff;
 
@@ -122,7 +111,7 @@
             }
         }
         .home-content {
-            margin-top: 60px;
+            margin-top: 80px;
             ul {
                 list-style: none;
             }

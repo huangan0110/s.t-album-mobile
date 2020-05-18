@@ -1,7 +1,7 @@
 <template>
     <div class="attention">
         <span class="count">全部关注(6)</span>
-        <AttentionCell></AttentionCell>
+        <AttentionCell @click="viewAttention"></AttentionCell>
         <AttentionCell></AttentionCell>
         <AttentionCell></AttentionCell>
         <AttentionCell></AttentionCell>
@@ -17,7 +17,20 @@
         },
         data() {
             return {
-
+                id:""
+            }
+        },
+        mounted() {
+            // this.id = this.$router.query.id;
+        },
+        methods:{
+            viewAttention() {
+                this.$router.push({
+                    path:"/other",
+                    query:{
+                        id:this.id
+                    }
+                })
             }
         }
     }

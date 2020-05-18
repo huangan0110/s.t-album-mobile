@@ -3,50 +3,92 @@
         <div class="mine-bg" v-show="contentScrollTop">
             <img :src="mineBgSrc" alt="" class="user-bg" :class="{'bg-scroll':isFixed}">
             <div class="mine-header" :class="{'mine-header-scroll':isFixed}">
-                <i class="van-icon van-icon-arrow-left back-i" @click="back"></i>
-                <img src="../../assets/img/fixed2.jpg" alt="" v-show="isFixed">
+
+                <img :src="userInfo.avatar" alt="" v-show="isFixed">
                 <i class="iconfont albumyoucecaidan pup-i" @click="showOptionPup"></i>
-                <span v-show="isFixed">用户名用户名</span>
+                <span v-show="isFixed">{{userInfo.nickName}}</span>
             </div>
             <div class="avartar-editinfo">
                 <div class="avatar">
-                    <img src="../../assets/img/fixed2.jpg" alt="">
+                    <van-image
+                        width="100%"
+                        lazy-load
+                        fit="cover"
+                        :src="userInfo.avatar"
+                    >
+                        <template v-slot:error>
+                            <img src="../../assets/img/default-avatar.png" alt="">
+                        </template>
+                    </van-image>
                 </div>
                 <div class="editinfo" @click="editInfo">
                     编辑信息
                 </div>
             </div>
             <div class="user-info">
-                <span>用户名用户名啊几个字？<span
-                    style="display: inline-block;background-color:#00CED1;padding: 2px 8px;border-radius: 12px;font-size: 10px;margin-top: 4px;">Lv.2</span></span>
+                <span>{{userInfo.nickName}}  &nbsp;&nbsp;&nbsp;<span
+                    style="display: inline-block;background-color:#00CED1;padding: 2px 8px;border-radius: 12px;font-size: 10px;margin-top: 4px;">Lv.{{userInfo.vip.id}}</span></span>
                 <span>这个人很懒，什么都没写</span>
-                <span>0 关注 &nbsp;&nbsp;&nbsp; 0 粉丝</span>
+                <span>{{userInfo.userResource.attentionNum}} 关注 &nbsp;&nbsp;&nbsp; {{userInfo.userResource.fanNum}} 粉丝</span>
                 <div class="actice">刚刚活跃</div>
             </div>
         </div>
-        <div class="mine-content">
+        <div class="mine-content"  >
             <van-tabs v-model="active" animated title-active-color="#008B45" sticky offset-top="60" lazy-render>
                 <van-tab title="相册">
                     <div class="album-content clearfix">
                         <ul>
                             <li v-for="(item,index) in albumData" :key="index">
-                                <album-card :imgSrc="item.imgSrc" :title="item.title"
-                                            :photoNum="item.photoNum"></album-card>
+                                <album-card :imgSrc="item.background" :title="item.name" :id="item.id" :photoNum="item.imageNum" :visiblePermissionId="item.visiblePermissionId"></album-card>
                             </li>
                         </ul>
                     </div>
                 </van-tab>
-                <van-tab title="精选">
-                    <MineFeatured></MineFeatured>
+                <van-tab title="精选" style="background-color:#eee;">
+                    <div v-for="(item,index) in featuredData" >
+                        <FeaturedCard
+                            :imageList="item.imageList"
+                            :browseNum="item.browseNum"
+                            :commentNum="item.commentNum"
+                            :content="item.content"
+                            :id="item.id"
+                            :userInfo="item.userInfo"
+                            :likeNum="item.likeNum"
+                            :createTime="item.createTime"
+                            :isDelete="false"
+                            :isAttention = "item.isAttention"
+                            :isLiked = "item.isLiked"
+                            :isMine="true"
+                            :delShared="delShared"
+                        ></FeaturedCard>
+                    </div>
+                    <div style="height: 10px"></div>
                 </van-tab>
-                <van-tab title="关注">
-                    <Attention></Attention>
+                <van-tab title="关注" >
+                    <div v-for="(item,index) in attentionData">
+                        <AttentionCell
+                            :nickName="item.nickName"
+                            :id="item.userResource.id"
+                            :fanNum="item.userResource.fanNum"
+                            :attentionNum="item.userResource.attentionNum"
+                            :avatar="item.avatar"
+                        ></AttentionCell>
+                    </div>
                 </van-tab>
                 <van-tab title="粉丝">
-                    <Fans></Fans>
+                    <div v-for="(item,index) in fansData">
+                        <AttentionCell
+                            :nickName="item.nickName"
+                            :id="item.userResource.id"
+                            :fanNum="item.userResource.fanNum"
+                            :attentionNum="item.userResource.attentionNum"
+                            :avatar="item.avatar"
+                        ></AttentionCell>
+                    </div>
                 </van-tab>
             </van-tabs>
         </div>
+        <div style="height: 50px"></div>
         <div class="van-overlay" style="background-color:rgba(0,0,0,0);z-index: 998" @click="showOption=false"
              v-if="showOption">
 
@@ -55,8 +97,11 @@
             <div class="option-cell" :class="{'active-cell':showOption}" @click="$router.push('/change_bg')">
                 更改背景
             </div>
-            <div class="option-cell" :class="{'active-cell':showOption}" @click="$router.push('/view_level')">
+            <div class="option-cell" :class="{'active-cell':showOption}" @click="viewLevel">
                 查看等级
+            </div>
+            <div class="option-cell" :class="{'active-cell':showOption}" @click="logOut1">
+                退出登录
             </div>
         </div>
     </div>
@@ -64,9 +109,11 @@
 
 <script>
     import AlbumCard from "../Home1/AlbumCard";
+    import AttentionCell from "../Common/AttentionCell";
     import MineFeatured from "./components/MineFeatured";
-    import Attention from "./components/Attention";
+    import FeaturedCard from "../Common/FeaturedCard";
     import Fans from "./components/Fans";
+    import {seeAlbum,getMyInfo,logout,getAttention,getFans,getFeatured} from "../../api/getData";
 
     var el = document.getElementsByClassName('van-tabs__wrap')[0];
 
@@ -74,66 +121,116 @@
     export default {
         components: {
             MineFeatured,
-            Attention,
+            AttentionCell,
             Fans,
-            AlbumCard
+            AlbumCard,
+            FeaturedCard
         },
         data() {
             return {
+                isLogin:true,
                 showOption: false,
                 active: '',
                 mineBgSrc: require("../../assets/bg/bg" + localStorage.getItem('bgIndex') + ".jpg"),
                 contentScrollTop: true,
                 isFixed: false,
-                albumData: [
-                    {
-                        imgSrc: require("./../../assets/img/fixed2.jpg"),
-                        title: "风光",
-                        photoNum: "12"
-                    },
-                    {
-                        imgSrc: require("./../../assets/img/fixed4.jpg"),
-                        title: "风光",
-                        photoNum: "12"
-                    },
-                    {
-                        imgSrc: require("./../../assets/img/fixed2.jpg"),
-                        title: "风光",
-                        photoNum: "12"
-                    },
-                    {
-                        imgSrc: require("./../../assets/img/fixed4.jpg"),
-                        title: "风光",
-                        photoNum: "12"
-                    },
-                    {
-                        imgSrc: require("./../../assets/img/fixed2.jpg"),
-                        title: "风光",
-                        photoNum: "12"
-                    },
-                    {
-                        imgSrc: require("./../../assets/img/fixed4.jpg"),
-                        title: "风光",
-                        photoNum: "12"
-                    },
-                    {
-                        imgSrc: require("./../../assets/img/fixed2.jpg"),
-                        title: "风光",
-                        photoNum: "12"
-                    },
-                    {
-                        imgSrc: require("./../../assets/img/fixed4.jpg"),
-                        title: "风光",
-                        photoNum: "12"
-                    },
-                ]
-
+                albumData: [],
+                userInfo:[],
+                featuredData:[],
+                attentionData:[],
+                fansData:[]
             }
         },
         mounted() {
+            let s = localStorage.getItem('access_token');
+            if (s == null) {
+                this.isLogin = false;
+
+            } else {
+                this.isLogin = true;
+            }
             window.addEventListener('scroll', this.getScrollTop);
+            seeAlbum().then(res => {
+                this.albumData = res.data.object.rows;
+            })
+            getMyInfo().then(res=>{
+                if(res.data.success) {
+                    this.userInfo = res.data.object
+                }
+            })
+            getAttention().then(res=>{
+                if(res.data.success) {
+                    let rows = res.data.object.rows;
+                    for(let i=0;i<rows.length;i++) {
+                        console.log(rows[i].attention)
+                        if(rows[i].attention) {
+                            this.attentionData.push(rows[i].attention)
+                        }
+                    }
+                }
+            })
+            getFans().then(res=>{
+                if(res.data.success) {
+                    let rows = res.data.object.rows;
+                    for(let i=0;i<rows.length;i++) {
+                        if(rows[i].fan) {
+                            this.fansData.push(rows[i].fan)
+                        }
+                    }
+                }
+            })
+            this.getMyShared()
+        },
+        beforeDestroy(){
+            window.removeEventListener("scroll", this.getScrollTop);
         },
         methods: {
+            getMyShared() {
+                let fromData = {};
+                if(localStorage.getItem("access_token")) {
+                    fromData.url = '/album/share/pageShare'
+                    fromData.mark = 1
+                }else{
+                    fromData.url = '/album/public/pageShare'
+                }
+                getFeatured(fromData).then(res=>{
+                    if(res.data.success) {
+                        let rows = res.data.object.rows;
+                        for(let i=0;i<rows.length;i++) {
+                            let row = rows[i];
+                            this.featuredData.push(row);
+                        }
+                    }
+                })
+            },
+            delShared(id) {
+                for(let i=0;i<this.featuredData.length;i++) {
+                    if(this.featuredData[i].id == id) {
+                        this.featuredData.splice(i,1);
+                    }
+                }
+            },
+            logOut1(){
+                this.showOption = false;
+                this.$dialog.alert({
+                    message: "是否退出登录？",
+                    showCancelButton:true,
+                }).then(()=>{
+                    logout().then(res=>{
+                        if(res.data.success) {
+                            this.$toast({
+                                message:"退出成功",
+                                position:"bottom"
+                            });
+                        }
+                        localStorage.clear();
+                        this.$router.push('/')
+                    })
+                }).catch(()=>{
+
+                })
+
+            },
             test(scrollTop) {
                 window.scrollTo(0, 0)
             },
@@ -168,7 +265,23 @@
             back() {
             },
             editInfo() {
-                this.$router.push('/edit_info')
+                let data = this.userInfo
+                this.$router.push({
+                    path:'/edit_info',
+                    query:{
+                        data:data
+                    }
+                })
+            },
+            viewLevel() {
+                this.$router.push({
+                    path: '/view_level',
+                    query: {
+                        id: this.userInfo.vip.id,
+                        vipScore:this.userInfo.userResource.vipScore,
+                        avatar:this.userInfo.avatar
+                    }
+                })
             },
             showOptionPup() {
                 this.showOption = true;
@@ -183,6 +296,17 @@
 </script>
 
 <style scoped lang="scss">
+    .noLogin {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        >>>.van-button {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 300px;
+        }
+    }
     > > > .van-overlay {
         z-index: 1005 !important;
     }
@@ -226,7 +350,7 @@
                     font-size: 20px;
                     color: #ffffff;
                     position: absolute;
-                    top: 24px;
+                    top: 44px;
                 }
 
                 .back-i {
@@ -277,6 +401,9 @@
                         height: 80px;
                         height: 80px;
                         object-fit: cover;
+                    }
+                    .van-image {
+                        height: 100%;
                     }
                 }
 
@@ -358,23 +485,27 @@
             > > > .van-tabs__line {
                 width: 15px !important;
             }
-            >>>.van-tabs__track {
+
+            > > > .van-tabs__track {
                 /*webkit-transform: translateZ(0);*/
                 /*-moz-transform: translateZ(0);*/
                 /*-ms-transform: translateZ(0);*/
                 /*-o-transform: translateZ(0);*/
                 /*transform: translateZ(0);*/
-                webkit-transform: translate3d(0,0,0);
-                -moz-transform: translate3d(0,0,0);
-                -ms-transform: translate3d(0,0,0);
-                -o-transform: translate3d(0,0,0);
-                transform: translate3d(0,0,0);
+                webkit-transform: translate3d(0, 0, 0);
+                -moz-transform: translate3d(0, 0, 0);
+                -ms-transform: translate3d(0, 0, 0);
+                -o-transform: translate3d(0, 0, 0);
+                transform: translate3d(0, 0, 0);
             }
+
             .album-content {
                 padding-top: 10px;
                 background-color: #eee;
+
                 ul {
                     list-style: none;
+
                     li {
                         float: left;
                         width: 47%;
@@ -422,17 +553,20 @@
 
         .active {
             width: 200px !important;
-            height: 100px !important;
+            height: 150px !important;
         }
+
         .clearfix:before,
         .clearfix:after {
             content: "";
             /* 触发BFC, 防止外边距合并 */
             display: table;
         }
+
         .clearfix:after {
             clear: both;
         }
+
         .clearfix {
             /* *代表    ie 6 7 能识别的符号  带*的属性，只有IE67执行   zoom代表ie67清除浮动的方法 */
             *zoom: 1;

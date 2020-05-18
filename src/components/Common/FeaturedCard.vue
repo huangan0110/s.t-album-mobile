@@ -1,108 +1,293 @@
 <template>
     <div class="featured-card">
         <div class="header">
-            <img src="../../assets/img/fixed5.jpg" alt="">
-            <span class="user-name">用户名用户名几个字？</span>
-            <span class="up-time">10天前</span>
-            <!--            <i class="van-icon van-icon-arrow-down option-btn" @click="showMore"></i>-->
-            <span class="desc">描述描述描述描述描述描述</span>
-            <i class="del van-icon van-icon-cross" @click="deleteFeatured"></i>
+            <van-image
+                width="100%"
+                lazy-load
+                fit="cover"
+                :src="userInfo.avatar"
+                @click="viewOther"
+            >
+                <template v-slot:error>
+                    <img style="width: 40px;height: 40px" src="../../assets/img/default-avatar.png" alt="">
+                </template>
+            </van-image>
+            <span class="user-name">{{userInfo.nickName}}</span>
+            <span class="up-time">{{createTime}}</span>
+            <div v-if="isLogin&&!isMine">
+                <div class="attention-btn" @click.stop="clickAttention(1)" v-if="!isAttention">
+                    未关注
+                </div>
+                <div class="attention-btn" @click.stop="clickAttention(2)" v-if="isAttention">
+                    已关注
+                </div>
+            </div>
+            <span class="desc">{{content}}</span>
+            <i class="del van-icon van-icon-cross" v-if="isMine" @click="deleteFeatured"></i>
         </div>
-        <div class="content" @click="$router.push('/featured_detail')">
+        <div class="content" @click="viewDetail">
             <div class="img-box">
-                <img :src="recData[0].imgSrc" alt="">
+                <van-image
+                    lazy-load
+                    fit="cover"
+                    :src="imageList1[0].url"
+                >
+                    <template v-slot:loading>
+                        <van-loading/>
+                    </template>
+                    <template v-slot:error>
+                        图片已被删除
+                    </template>
+                </van-image>
             </div>
-            <div class="img-box" v-show="recData.length>1">
-                <img :src="recData[1].imgSrc" alt="">
+            <div class="img-box" v-if="imageList1.length>1">
+                <img :src="imageList1[1].url" alt="">
             </div>
-            <div class="img-box" v-show="recData.length>2">
-                <img :src="recData[2].imgSrc" alt="">
-                <div class="more-pic" v-if="recData.length>3">
-                    {{recData.length}}图
+            <div class="img-box" v-if="imageList1.length>2">
+                <img :src="imageList1[2].url" alt="">
+                <div class="more-pic" v-if="imageList1.length>3">
+                    {{length}}图
                 </div>
             </div>
         </div>
         <div class="bottom">
             <div class="bottom-option">
-                <i class="iconfont albumz-like"></i> <span>12</span>
+                <i class="iconfont albumz-like" v-if="!isLiked" @click="like(true)"></i>
+                <i class="iconfont albumdianzan1" v-if="isLiked" style="color: #1989fa" @click="like(false)"></i>
+                <span>{{likeNum}}</span>
             </div>
             <div class="bottom-option" @click="$router.push('/featured_detail')">
-                <i class="iconfont albumpinglun2" style="font-size: 15px"></i> <span>1212</span>
+                <i class="iconfont albumpinglun2" style="font-size: 15px"></i> <span>{{commentNum}}</span>
             </div>
             <div class="bottom-option">
-                <i class="iconfont albumicon" style="font-size: 16px"></i> <span>12</span>
+                <i class="iconfont albumicon" style="font-size: 16px"></i> <span>{{browseNum}}</span>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-    import { Dialog } from 'vant';
+    import {Dialog} from 'vant';
+    import {delShared,clickLike,setAttention} from "../../api/getData";
+
     export default {
         name: "FeaturedCard",
+        props: {
+            id: {
+                type: Number,
+                default: 0
+            },
+            imageList: {
+                type: Array,
+                default: []
+            },
+            showLike: {
+                type: Boolean,
+                default: false
+            },
+            likeNum: {
+                type: Number,
+                default: 0
+            },
+            browseNum: {
+                type: Number,
+                default: 0
+            },
+            commentNum: {
+                type: Number,
+                default: 0
+            },
+            userInfo: {
+                type: Object,
+                default: "用户名"
+            },
+            createTime: {
+                type: String,
+                default: "事件"
+            },
+            showAttention: {
+                type: Boolean,
+                default: false
+            },
+            content: {
+                type: String,
+                default: "标题"
+            },
+            isDelete: {
+                type: Boolean,
+                default: false
+            },
+            isAttention: {
+                type: Boolean,
+                default: false
+            },
+            isLiked: {
+                type: Boolean,
+                default: false
+            },
+            isMine: {
+                type: Boolean,
+                default: false
+            },
+            delShared: {
+                type: Function,
+                default: null
+            }
+        },
         data() {
             return {
-                // showMoreOption:true
-                recData: [
-                    {
-                        title: "假装在法国",
-                        imgSrc: require("../../assets/img/fixed4.jpg"),
-                        like: true,
-                        viewNum: 23,
-                        commentNum: 3,
-                        username: "mirsan",
-                        attention: false,
-                        time: "一天前",
-                        avatarSrc: require("../../assets/img/fixed1.jpg")
-                    },
-                    {
-                        title: "假装在法国",
-                        imgSrc: require("../../assets/img/fixed4.jpg"),
-                        like: true,
-                        viewNum: 23,
-                        commentNum: 3,
-                        username: "mirsan",
-                        attention: true,
-                        time: "一天前",
-                        avatarSrc: require("../../assets/img/fixed1.jpg")
-                    },
-                    {
-                        title: "假装在法国",
-                        imgSrc: require("../../assets/img/fixed4.jpg"),
-                        like: true,
-                        viewNum: 23,
-                        commentNum: 3,
-                        username: "mirsan",
-                        attention: true,
-                        time: "一天前",
-                        avatarSrc: require("../../assets/img/fixed1.jpg")
-                    },
-                    {
-                        title: "假装在法国",
-                        imgSrc: require("../../assets/img/fixed4.jpg"),
-                        like: true,
-                        viewNum: 23,
-                        commentNum: 3,
-                        username: "mirsan",
-                        attention: true,
-                        time: "一天前",
-                        avatarSrc: require("../../assets/img/fixed1.jpg")
-                    }
-                ]
+                // showMoreOption:true，
+                imageList1:[],
+                isLogin:false,
+                length:""
+            }
+        },
+        mounted() {
+            this.length = this.imageList.length;
+            if (this.imageList.length == 0) {
+                this.imageList1[0] = {
+                    fileId: "",
+                    fileName: "",
+                    gategoryId: 1,
+                    groupId: 24,
+                    groupName: "group1",
+                    id: 8,
+                    url: "11",
+                    userId: 23,
+                    visiblePermissionId: 1,
+                }
+                this.imageList1[1] = {
+                    fileId: "",
+                    fileName: "",
+                    gategoryId: 1,
+                    groupId: 24,
+                    groupName: "group1",
+                    id: 8,
+                    url: "11",
+                    userId: 23,
+                    visiblePermissionId: 1,
+                }
+                this.imageList1[2] = {
+                    fileId: "",
+                    fileName: "",
+                    gategoryId: 1,
+                    groupId: 24,
+                    groupName: "group1",
+                    id: 8,
+                    url: "11",
+                    userId: 23,
+                    visiblePermissionId: 1,
+                }
+            }else{
+                this.imageList1 = this.imageList;
+            }
+            if(localStorage.getItem('access_token')){
+                this.isLogin = true
+            }else{
+                this.isLogin = false;
             }
         },
         created() {
 
         },
-        methods:{
+        methods: {
+            viewOther(){
+                this.$router.push({
+                    path:'/other',
+                    id:this.allData.userInfo.id
+                })
+            },
+            like(status) {
+                let url = '';
+                let method = "";
+                if(status) {
+                    url = '/album/likeRecord/clickLike';
+                    method="post"
+                }else{
+                    url ='/album/likeRecord/cancelLike';
+                    method='delete'
+                }
+                clickLike(this.id,url,method).then(res=>{
+                    if(res.data.success) {
+                        if(res.data.object == "点赞成功") {
+                            this.isLiked = true;
+                            this.likeNum++;
+                        }else{
+                            this.isLiked = false;
+                            this.likeNum--;
+                        }
+                    }
+                })
+            },
+            viewDetail() {
+                let data = {};
+                data.id = this.id;
+                data.browseNum = this.browseNum;
+                data.commentNum = this.commentNum;
+                data.content = this.content;
+                data.createTime = this.createTime;
+                data.imageList = this.imageList;
+                data.likeNum = this.likeNum;
+                data.userInfo = this.userInfo;
+                data.isAttention = this.isAttention;
+                data.isLiked = this.isLiked;
+                this.$router.push({
+                    path: "/featured_detail",
+                    query: {
+                        data: data,
+                    }
+                })
+            },
+            clickAttention(type){
+
+                let url ="";
+                let method = ""
+                console.log(type)
+                if(type == '1') {  //关注
+                    url = '/user/attention/add';
+                    method = 'post'
+                }else{
+                    url='/user/attention/delete';
+                    method:'delete'
+                }
+                debugger;
+                setAttention(this.userInfo.id,url,method).then(res=>{
+                    if(res.data.success) {
+                        this.isAttention = true;
+                        this.$toast({
+                            message:"已关注",
+                            position:"bottom"
+                        });
+                    }
+                })
+            },
             deleteFeatured() {
                 Dialog.confirm({
                     title: '删除',
                     message: '是否删除内容？',
-                    width:240,
+                    width: 240,
                 })
                     .then(() => {
-                        // on confirm
+                        this.delShared(this.id);
+                        this.$toast({
+                            message: "删除成功",
+                            position: "bottom"
+                        });
+                        // delShared(this.id).then(res=>{
+                        //     if(res.data.success) {
+                        //         this.delShared(this.id)
+                        //         this.$toast({
+                        //             message:"删除成功",
+                        //             position:"bottom"
+                        //         });
+                        //
+                        //     }else{
+                        //         this.$toast({
+                        //             message:res.data.message,
+                        //             position:"bottom"
+                        //         });
+                        //     }
+                        // })
                     })
                     .catch(() => {
                         // on cancel
@@ -123,21 +308,31 @@
         border: none;
         border-radius: 10px;
         background-color: #fff;
+
         .header {
             height: 75px;
             position: relative;
-            img {
-                width: 40px;
+
+            .van-image {
+                width: 40px !important;
                 height: 40px;
                 border-radius: 50%;
                 object-fit: cover;
+                top: -3px;
             }
+
+            .van-image__error, .van-image__loading {
+                width: 40px !important;
+                height: 40px !important;
+            }
+
             .user-name {
                 position: absolute;
                 left: 60px;
                 top: 0;
                 font-size: 13px;
             }
+
             .up-time {
                 position: absolute;
                 left: 60px;
@@ -145,17 +340,32 @@
                 font-size: 11px;
                 color: #999;
             }
+            .attention-btn {
+                position: absolute;
+                width: 50px;
+                height: 20px;
+                top: 4px;
+                right: 10px;
+                border-radius: 10px;
+                background-color: #008b45;
+                font-size: 12px;
+                text-align: center;
+                line-height: 20px;
+                color: #fff;
+            }
             .option-btn {
                 position: absolute;
                 right: 15px;
                 top: 15px;
             }
+
             .desc {
                 position: absolute;
                 left: 0px;
                 bottom: 10px;
                 font-size: 13px;
             }
+
             .del {
                 position: absolute;
                 top: 2px;
@@ -164,6 +374,7 @@
                 border-radius: 50%;
                 transition: linear 0.1s;
             }
+
             .del:active {
                 background-color: #eee;
                 padding: 8px;
@@ -171,29 +382,33 @@
                 right: 2px;
             }
         }
+
         .content {
             overflow: hidden;
             position: relative;
             border-radius: 5px;
+
             .img-box {
                 width: 33%;
                 height: 0px;
                 padding-bottom: 33%;
-                overflow:hidden;
+                overflow: hidden;
                 margin: 0;
-                position:relative;
+                position: relative;
                 float: left;
                 margin-right: 0.5%;
-                img {
-                    position:absolute;
+
+                .van-image {
                     width: 100%;
-                    height: 100%;
-                    object-fit: cover;
+                    height: 33vw;
                 }
             }
+
             .img-box:last-child {
                 margin-right: 0;
+                border-radius: 0px 5px 5px 0px;
             }
+
             .more-pic {
                 position: absolute;
                 display: inline-block;
@@ -203,16 +418,18 @@
                 text-align: center;
                 right: 0;
                 top: 0;
-                background-color: rgba(0,0,0,0.3);
+                background-color: rgba(0, 0, 0, 0.3);
                 color: #fff;
                 font-size: 10px;
             }
         }
+
         .bottom {
             height: 30px;
             width: 100%;
             margin-top: 5px;
             line-height: 50px;
+
             .bottom-option {
                 width: 33%;
                 height: 30px;
@@ -220,6 +437,7 @@
                 float: left;
                 text-align: center;
                 color: #999;
+
                 span {
                     font-size: 12px;
                 }

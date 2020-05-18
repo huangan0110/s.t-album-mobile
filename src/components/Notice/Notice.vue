@@ -1,11 +1,11 @@
 <template>
     <div class="notice">
-        <div class="notice-header">
+        <div class="notice-header" v-if="isLogin">
             <span class="title">消息</span>
             <span class="clearmsg" @click="clearMsg">清除通知</span>
         </div>
-        <div style="height:50px;"></div>
-        <div class="notice-content">
+        <div style="height:70px;" v-if="isLogin"></div>
+        <div class="notice-content" v-if="isLogin">
 
             <div
                 class="notice-cell"
@@ -46,36 +46,52 @@
                 <span>点赞</span>
                 <i class="van-icon van-icon-arrow"></i>
             </div>
+        </div >
+        <div class="notice-msg" v-if="isLogin">
+            <div v-for="(item,index) in msgData">
+                <MsgCard :msgData="item" :isComment="true"></MsgCard>
+            </div>
         </div>
-        <div class="notice-msg">
-            <MsgCard></MsgCard>
-            <MsgCard></MsgCard>
-            <MsgCard></MsgCard>
-            <MsgCard></MsgCard>
-            <MsgCard></MsgCard>
-            <MsgCard></MsgCard>
-            <MsgCard></MsgCard>
-            <MsgCard></MsgCard>
-            <MsgCard></MsgCard>
-            <MsgCard></MsgCard>
-            <MsgCard></MsgCard>
-            <MsgCard></MsgCard>
-        </div>
-        暂无更多
+<!--        <div v-if="isLogin">-->
+<!--            暂无更多-->
+<!--        </div>-->
         <div style="height: 70px"></div>
+        <div v-if="!isLogin" class="noLogin">
+            <van-button type="primary" size="normal" @click="$router.push('email-login')">登录</van-button>
+        </div>
     </div>
 </template>
 
 <script>
 import MsgCard from "../Common/MsgCard";
+import {getAllComment} from "../../api/getData";
+
 export default {
     components:{
-        MsgCard
+        MsgCard,
     },
     data() {
         return {
             touchIndex:0,
+            isLogin:false,
+            msgData:[]
         };
+    },
+    mounted() {
+
+        let s = localStorage.getItem('access_token');
+        if(s == null) {
+            this.isLogin = false;
+        }else{
+            this.isLogin = true;
+        }
+        getAllComment().then(res=>{
+            let rows = res.data.object.rows
+            for(let i in rows) {
+                this.msgData.push(rows[i])
+            }
+        })
+
     },
     methods: {
         touchstart() {
@@ -95,13 +111,24 @@ export default {
 </script>
 
 <style scoped lang="scss">
+    .noLogin {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        >>>.van-button {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 300px;
+        }
+    }
 .notice {
     position: relative;
     .notice-header {
-        height: 50px;
+        height: 70px;
         width: 100%;
         position: fixed;
-        top: 0;
+        top: 0px;
         z-index: 9;
         background-color: #fff;
         border-bottom: 0.5px solid #cccccc;

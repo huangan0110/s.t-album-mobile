@@ -16,7 +16,7 @@
                 placeholder="请输入描述"
             />
             <br>
-            <van-cell title="上传到" is-link value="请选择" @click="chooseUpList"/>
+            <van-cell title="上传到" is-link :value="name" @click="chooseUpList"/>
             <van-cell title="画质" is-link :value="qualityName" @click="showPicQuality = !showPicQuality"/>
             <br>
             <van-cell
@@ -33,7 +33,7 @@
                 <div class="picup-title">
                     <span>选择图片</span>
                 </div>
-                <van-uploader v-model="fileList" multiple :max-count="9" :after-read="afterRead"/>
+                <van-uploader v-model="fileList" multiple :max-count="9" :after-read="afterRead" :disabled="disabled"/>
             </div>
         </div>
         <div class="quality-pup">
@@ -71,10 +71,15 @@
                 </van-cell>
             </van-popup>
         </div>
+        <van-overlay :show="show">
+            <van-loading size="24px">上传中...</van-loading>
+        </van-overlay>
     </div>
 </template>
 
 <script>
+    import {upImg} from "../../api/getData";
+
     export default {
         name: "UpLoad",
         data() {
@@ -85,10 +90,42 @@
                 checked: false,
                 pictitle: '',
                 quality: 'small',
-                qualityName: '正常'
+                qualityName: '正常',
+                data: "",
+                id: "",
+                name: "请选择",
+                disabled: false,
+                type: '',
+                show: false,
+                background: ""
             }
         },
+        mounted() {
+            let routerData = this.$route.query.data;
+            if (routerData) {
+                console.log(routerData)
+                this.pictitle = routerData.desc;
+                this.checked = routerData.checked;
+                this.qualityName = routerData.qualityName;
+                this.quality = routerData.quality;
+                this.id = routerData.id;
+                this.name = routerData.name;
+                this.background = routerData.background;
+                if (routerData.type == 'detailUpload') {
+                    this.type = 'detailUpload';
+                }
+            }
+            if (this.name == null || this.name == "" || this.name == "请选择" || this.name == undefined) {
+                this.disabled = true;
+            } else {
+                this.disabled = false;
+            }
+
+        },
         methods: {
+            test() {
+                console.log("121");
+            },
             chooseQuality(quality) {
                 this.quality = quality;
                 if (quality == 'small') {
@@ -101,16 +138,88 @@
                 this.showPicQuality = false;
             },
             chooseUpList() {
-                this.$router.push('/move_photo')
+                if (this.type == 'detailUpload') {
+
+                } else {
+                    this.$router.push({
+                        path: '/move_photo',
+                        query: {
+                            type: 'upload',
+                            data: {
+                                desc: this.pictitle,
+                                qualityName: this.qualityName,
+                                checked: this.checked,
+                                quality: this.quality,
+                                id: this.id,
+                                name: this.name,
+                                background: this.background
+                            }
+                        }
+                    })
+                }
             },
             back() {
-                this.$router.push('/home');
+                if (this.type == 'detailUpload') {
+                    console.log(this.id)
+                    this.$router.push({
+                        path: '/album_detail',
+                        query: {
+                            id: this.id,
+                            title: this.name,
+                            background: this.background
+                        }
+                    });
+                } else {
+                    this.$router.push('/home');
+                }
             },
             uploadPic() {
-                for (var index in this.fileList) {
-                    this.compress(this.fileList[index]);
+                this.show = true;
+                // for (var index in this.fileList) {
+                //     this.compress(this.fileList[index]);
+                // }
+                let formData = {};
+                let isShare = 0;
+                if (this.checked) {
+                    isShare = 1;
+                } else {
+                    isShare = 0;
                 }
-                console.log(this.imgBase64);
+                formData = [];
+                console.log(this.fileList)
+                for (let i = 0; i < this.fileList.length; i++) {
+                    formData.push({
+                        author: "",
+                        albumId: this.id,
+                        fileName: (Date.parse(new Date()) + i).toString(),
+                        ext: this.fileList[i].file.type.slice(6, 10),
+                        base64: this.fileList[i].content
+                    })
+                }
+                upImg(formData, isShare, this.pictitle).then(res => {
+                    if (res.data.success) {
+
+                        this.$toast({
+                            message: "上传成功",
+                            position: "bottom"
+                        });
+                        this.show = false;
+                        this.$router.push({
+                            path: '/album_detail',
+                            query: {
+                                id: this.id,
+                                title: this.name,
+                                background: this.background
+                            }
+                        });
+                    } else {
+                        this.$toast({
+                            message: res.data.message,
+                            position: "bottom"
+                        });
+                    }
+                })
+
             },
             afterRead(file) {
             },
@@ -156,6 +265,15 @@
         width: 100%;
         background-color: #eee;
 
+        .van-overlay {
+            z-index: 999;
+            text-align: center;
+
+            .van-loading {
+                margin-top: 80%;
+            }
+        }
+
         .quality-pup {
             .van-icon, .van-icon::before {
                 color: #1989fa;
@@ -171,6 +289,7 @@
             border-bottom: 0.5px solid #eee;
             color: #555;
             z-index: 999;
+
             .back-btn {
                 width: 100px;
                 height: 50px;
@@ -210,9 +329,10 @@
         }
 
         .upload-content {
-            >>>.van-field__label {
+            > > > .van-field__label {
                 width: 55px;
             }
+
             .v-checkbox {
                 right: 0;
                 position: absolute;
@@ -221,20 +341,24 @@
             .picup {
                 padding: 14px 10px 0 10px;
                 background-color: #fff;
+
                 .picup-title {
                     font-size: 14px;
                     color: #323233;
                     margin-bottom: 10px;
+
                     span {
                         margin-left: 6px;
                     }
                 }
-                >>>.van-uploader__upload {
-                    background-color: #eee!important;
+
+                > > > .van-uploader__upload {
+                    background-color: #eee !important;
                     margin-bottom: 16px;
                 }
-                >>>.van-uploader__preview {
-                    margin: 0 12px 18px 0!important;
+
+                > > > .van-uploader__preview {
+                    margin: 0 12px 18px 0 !important;
                 }
             }
         }

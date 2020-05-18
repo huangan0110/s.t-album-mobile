@@ -7,9 +7,9 @@
     <div class="header-level"></div>
     <div class="user-level">
         <div class="avatar-level">
-            <img src="../../assets/img/fixed2.jpg" alt=""><br>
+            <img :src="avatar" alt=""><br>
             <span style="color: #333">当前等级: </span>
-            <span style="color: #ee0a24;font-weight: bold;font-family: 方正粗黑宋简体">Lv.7</span>
+            <span style="color: #ee0a24;font-weight: bold;font-family: 方正粗黑宋简体">Lv.1</span>
         </div>
         <br>
         <div class="progress-bar">
@@ -61,22 +61,26 @@
     <div class="level-spec">
         当前等级特权
         <ul>
-            <li><div class="dot"></div>&nbsp;&nbsp;&nbsp;<span>123123</span></li>
-            <li><div class="dot"></div>&nbsp;&nbsp;&nbsp;<span>123123</span></li>
-            <li><div class="dot"></div>&nbsp;&nbsp;&nbsp;<span>123123</span></li>
-            <li><div class="dot"></div>&nbsp;&nbsp;&nbsp;<span>123123</span></li>
+            <li><div class="dot"></div>&nbsp;&nbsp;&nbsp;<span>100张照片免费容量  </span></li>
+            <li><div class="dot"></div>&nbsp;&nbsp;&nbsp;<span>相册上限4个  </span></li>
         </ul>
 
-    </div>
-    <div class="next-level">
-        <span style="color: #666;font-size: 12px">距离下一个等级： </span><span style="font-size: 12px;font-weight: bold;color: red">Lv.8</span>
     </div>
 </div>
 </template>
 
 <script>
     export default {
-        name: "ViewLevel"
+        name: "ViewLevel",
+        data(){
+            return {
+                avatar:""
+            }
+        },
+        mounted() {
+            this.avatar = this.$route.query.avatar
+            console.log(this.avatar);
+        }
     }
 </script>
 
@@ -168,7 +172,7 @@
                 }
 
                 .progress {
-                    width: 80%;
+                    width: 1%;
                     height: 8px;
                     background: linear-gradient(to left,#EE0000,#FF6A6A,#FFAEB9);
                     float: left;

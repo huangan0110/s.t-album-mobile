@@ -1,24 +1,61 @@
 <template>
-    <div class="attention-cell" @click="test('1')">
-        <img src="../../assets/img/fixed4.jpg">
-        <span class="user-name">用户名</span>
+    <div class="attention-cell">
+<!--        <img src="../../assets/img/fixed4.jpg">-->
+        <van-image
+            lazy-load
+            fit="cover"
+            :src="avatar"
+        >
+            <template v-slot:error>
+                <img src="../../assets/img/default-avatar.png" alt="">
+            </template>
+        </van-image>
+        <span class="user-name">{{nickName}}</span>
         <div class="user-info">
-            <span class="featured-span">5精选</span>&nbsp;
-            <span class="attention-span">5关注</span>&nbsp;
-            <span class="fans-span">5粉丝</span>
+<!--            <span class="featured-span">{{}}精选</span>&nbsp;-->
+            <span class="attention-span">{{attentionNum}}关注</span>&nbsp;
+            <span class="fans-span">{{fanNum}}粉丝</span>
         </div>
-        <div class="attention-btn" @click.stop="test('2')">
-            已关注
-        </div>
+<!--        <div class="attention-btn" @click.stop="test('2')">-->
+<!--            关注-->
+<!--        </div>-->
     </div>
 </template>
 
 <script>
     export default {
         name: "AttentionCell",
-        data() {
-            return {}
+        props:{
+            nickName:{
+                type:String,
+                default:""
+            },
+            id:{
+                type:String,
+                default:""
+            },
+            fanNum:{
+                type:String,
+                default:""
+            },
+            attentionNum:{
+                type:String,
+                default:""
+            },
+            avatar:{
+                type:String,
+                default:""
+            },
         },
+        mounted(){
+            console.log(this.fanNum)
+            // this.nickName = this.attention.nickName
+        },
+        data() {
+            return {
+            }
+        },
+
         methods:{
             test(a) {
                 console.log(a)
@@ -40,6 +77,11 @@
         position: absolute;
         left: 20px;
         top: 10px;
+    }
+    .van-image {
+        position: absolute;
+        top: 0;
+        letter-spacing: 10px;
     }
     .user-name{
         font-size: 14px;
