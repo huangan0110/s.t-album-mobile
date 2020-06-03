@@ -78,7 +78,7 @@ export default new Router({
             component: UpLoad,
             meta: {
                 showTabbar: false,
-                index:4
+                index:5
             }
         },
         {
@@ -96,6 +96,7 @@ export default new Router({
             component: FeaturedDetail,
             meta: {
                 showTabbar: false,
+                index:6
             }
         },
         {
@@ -104,6 +105,7 @@ export default new Router({
             component: AlbumDetail,
             meta: {
                 showTabbar: false,
+                index:6
             }
         },
         {
@@ -112,6 +114,7 @@ export default new Router({
             component: EditAlbum,
             meta: {
                 showTabbar: false,
+                index:7
             }
         },
         {
@@ -120,6 +123,7 @@ export default new Router({
             component: MovePhoto,
             meta: {
                 showTabbar: false,
+                index:8
             }
         },
         {
@@ -144,6 +148,8 @@ export default new Router({
             component: Notice,
             meta: {
                 showTabbar: true,
+                index:8,
+                keepAlive: true
             }
         },
         {
@@ -176,6 +182,8 @@ export default new Router({
             component: Mine,
             meta: {
                 showTabbar: true,
+                index:9,
+                keepAlive:true
             }
         },
         {
@@ -184,6 +192,7 @@ export default new Router({
             component: Other,
             meta: {
                 showTabbar: false,
+                index:20
             }
         },
         {
@@ -192,6 +201,7 @@ export default new Router({
             component: EditInfo,
             meta: {
                 showTabbar: false,
+                index:11
             }
         },
         {
@@ -200,6 +210,7 @@ export default new Router({
             component: ChnagePass,
             meta: {
                 showTabbar: false,
+                index:12
             }
         },
         {
@@ -208,6 +219,7 @@ export default new Router({
             component: ChangeBg,
             meta: {
                 showTabbar: false,
+                index:12
             }
         },
         {
@@ -216,6 +228,7 @@ export default new Router({
             component: ViewLevel,
             meta: {
                 showTabbar: false,
+                index:12
             }
         },
     ]

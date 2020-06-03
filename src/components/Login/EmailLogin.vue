@@ -1,30 +1,33 @@
 <template>
-    <div class="email-login">
-        <div class="header">
-            &nbsp;&nbsp;<i class="iconfont albumzuojiantou" @click="goPath('/')"></i>&nbsp;&nbsp;<span>邮箱登录</span>
-        </div>
-        <div class="tip">
-            <span @click="register">&nbsp;&nbsp;没有账号?  立即注册账号</span>
-        </div>
-        <div class="email-input">
-            <van-field
-                v-model="email"
-                left-icon="envelop-o"
-                placeholder="请输入邮箱"
-            />
-        </div>
-        <div class="email-input">
-            <van-field
-                v-model="pass"
-                left-icon="envelop-o"
-                placeholder="请输入密码"
-            />
-        </div>
-        <div class="login-btn">
-            <van-button round type="info" @click="login11" :loading="isLogin" loading-text="登录中">登录</van-button>
-        </div>
+    <div style="position: absolute;width: 100%;height: 100%">
+        <div class="email-login">
+            <div class="header">
+                &nbsp;&nbsp;<i class="iconfont albumzuojiantou" @click="goPath('/')"></i>&nbsp;&nbsp;<span>邮箱登录</span>
+            </div>
+            <div class="tip">
+                <span @click="register">&nbsp;&nbsp;没有账号?  立即注册账号</span>
+            </div>
+            <div class="email-input">
+                <van-field
+                    v-model="email"
+                    left-icon="envelop-o"
+                    placeholder="请输入邮箱"
+                />
+            </div>
+            <div class="email-input">
+                <van-field
+                    v-model="pass"
+                    left-icon="envelop-o"
+                    placeholder="请输入密码"
+                />
+            </div>
+            <div class="login-btn">
+                <van-button round type="info" @click="login11" :loading="isLogin" loading-text="登录中">登录</van-button>
+            </div>
 
+        </div>
     </div>
+
 </template>
 
 <script>
@@ -51,6 +54,7 @@
                 this.isLogin = false;
                 localStorage.setItem("access_token",res.data.access_token);
                 localStorage.setItem("refresh_token",res.data.refresh_token);
+                localStorage.setItem("bgIndex",'0')
                 this.$router.push('/home');
             }).catch(err=>{
                 this.$toast({
@@ -67,11 +71,12 @@
 
 <style scoped lang="scss">
 .email-login {
-    padding: 10px;
     position: absolute;
+    padding: 10px;
     width: calc(100% - 20px);
     height: calc(100% - 20px);
     overflow: hidden;
+
     .header {
         width: 100%;
         height: 40px;

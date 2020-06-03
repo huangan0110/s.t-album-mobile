@@ -1,6 +1,6 @@
 <template>
     <div class="login">
-        <img src="../../assets/img/logo.jpg" />
+        <img :src="imgUrl" @touchstart="start"/>
         <div class="login-btn">
             <van-button round type="info" hairline  @click="goPath('/email-login')">邮箱登录</van-button>
             <van-button round plain type="info" hairline  @click="goPath('/featured')">立即体验</van-button>
@@ -23,13 +23,34 @@ export default {
     name: "Login",
     data() {
         return {
-            checked: true
+            checked: true,
+            imgUrl: require("../../assets/img/logo.jpg"),
+            longClick: 0,
+            timeOutEvent: 0
         };
     },
     methods:{
         goPath(url) {
             this.$router.push(url);
-        }
+        },
+
+        start() {
+            console.log("111")
+            var that = this;
+            this.longClick = 0;
+            this.timeOutEvent = setTimeout(function() {
+                that.longClick = 1;
+                that.downImg()
+            }, 500);
+        },
+        downImg(){
+            // if(!window.plus) return;
+            plus.gallery.save('http://n.sinaimg.cn/photo/transform/162/w550h412/20200509/a505-itmiwry2579839.jpg', function () {
+                alert('保存成功!');
+            },function(){
+                alert('保存失败，请重试!');
+            });
+        },
     }
 };
 </script>

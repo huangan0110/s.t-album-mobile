@@ -33,7 +33,7 @@
                 <div class="picup-title">
                     <span>选择图片</span>
                 </div>
-                <van-uploader v-model="fileList" multiple :max-count="9" :after-read="afterRead" :disabled="disabled"/>
+                <van-uploader v-model="fileList" multiple :max-count="9" :after-read="afterRead" :disabled="disabled" preview-size="108"/>
             </div>
         </div>
         <div class="quality-pup">
@@ -204,14 +204,21 @@
                             position: "bottom"
                         });
                         this.show = false;
-                        this.$router.push({
-                            path: '/album_detail',
-                            query: {
-                                id: this.id,
-                                title: this.name,
-                                background: this.background
-                            }
-                        });
+                        if(this.id == "") {
+                            this.$router.push({
+                                path: '/album_detail',
+                                query: {
+                                    id: this.id,
+                                    title: this.name,
+                                    background: this.background
+                                }
+                            });
+                        }else {
+                            this.$router.push({
+                                path: '/home',
+                            });
+                        }
+
                     } else {
                         this.$toast({
                             message: res.data.message,
@@ -264,7 +271,22 @@
         height: 100%;
         width: 100%;
         background-color: #eee;
-
+        /*>>>.van-uploader__preview-image {*/
+        /*    width: 100%!important;*/
+        /*    height: 100%!important;*/
+        /*}*/
+        /*>>>.van-uploader__preview {*/
+        /*    width: 29%;*/
+        /*    height: 29vw;*/
+        /*}*/
+        /*!*>>>.upload .upload-content .picup .van-uploader__upload {*!*/
+        /*!*    width: 29%;*!*/
+        /*!*    height: 29vw;*!*/
+        /*!*}*!*/
+        /*>>>.van-uploader__upload {*/
+        /*    width: 29%!important;*/
+        /*    height: 29vw!important;*/
+        /*}*/
         .van-overlay {
             z-index: 999;
             text-align: center;
@@ -282,23 +304,22 @@
         }
 
         .upload-header {
-            height: 50px;
+            height: 80px;
             width: 100%;
             position: fixed;
-            background-color: #fff;
+            background-color: #1a497d;
             border-bottom: 0.5px solid #eee;
-            color: #555;
+            color: #fff;
             z-index: 999;
 
             .back-btn {
-                width: 100px;
-                height: 50px;
+                /*width: 100px;*/
+                /*height: 50px;*/
 
                 i {
                     font-size: 26px;
                     position: absolute;
-                    top: 50%;
-                    transform: translateY(-50%);
+                    bottom: 9px;
                 }
 
                 i {
@@ -312,20 +333,19 @@
                 font-size: 16px;
                 left: 50%;
                 transform: translateX(-50%);
-                top: 12px;
+                top: 44px;
             }
 
             .up-btn {
                 position: absolute;
                 right: 25px;
-                top: 50%;
-                transform: translateY(-50%);
+                bottom: 15px;
                 font-size: 16px;
             }
         }
 
         .up-header {
-            height: 50px;
+            height: 80px;
         }
 
         .upload-content {

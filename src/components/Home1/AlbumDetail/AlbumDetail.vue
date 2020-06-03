@@ -37,7 +37,7 @@
             </div>
         </div>
         <div class="up-btn" v-if="!isEdit">
-            <van-button icon="1" type="info" @click="uploadPic">上传图片</van-button>
+            <van-button icon="1" type="info" @click="uploadPic" >上传图片</van-button>
             <i class="iconfont albumcamera"></i>
         </div>
         <div class=" clearfix" :class="{bigview:isBigView,photolist:!isBigView}">
@@ -84,12 +84,13 @@
             <van-cell title="大图浏览" is-link icon="expand-o" @click="bigView" v-if="!isBigView"/>
             <van-cell title="小图浏览" is-link icon="photo-o" @click="bigView" v-else/>
         </van-popup>
-        <van-image-preview v-model="seePhoto" :images="imgSrcArr" @change="onChange" @close="onClose"  >
+        <van-image-preview v-model="seePhoto" :images="imgSrcArr" @change="onChange" @close="onClose" >
 <!--            <template v-slot:index>第{{ index }}页</template>-->
-            <template v-slot:cover>
+            <template v-slot:cover  @touchstart="start">
                 <div class="viewPhoto-bg" :style="bacImage">
                 </div>
-                <div style="font-size: 12px; position: fixed;top: 12px;right: 10px; width: 60px;height: 20px;z-index: 999999;color: #00ccff" @click="setBg">设为背景</div>
+                <div style="font-size: 12px; position: fixed;top: 40px;left: 20px; width: 60px;height: 20px;z-index: 999999;color: #fff" @click="start">保存</div>
+                <div style="font-size: 12px; position: fixed;top: 40px;right: 10px; width: 60px;height: 20px;z-index: 999999;color: #fff" @click="setBg">设为背景</div>
             </template>
         </van-image-preview>
 <!--        <div class="van-overlay"></div>-->
@@ -98,6 +99,7 @@
 
 <script>
     import {deletePhoto,seeAlbumInfo,updateAlbum} from "../../../api/getData";
+    import { Toast } from 'vant';
 
     export default {
         name: "AlbumDetail",
@@ -139,6 +141,14 @@
             // seeAlbumInfo(id)
         },
         methods: {
+            start() {
+                let url = this.bacImage.backgroundImage.slice(4,-2);
+                plus.gallery.save(url, function () {
+                    Toast.success('保存成功');
+                },function(){
+                    Toast.fail('保存失败，请重试!');
+                });
+            },
             setBg(){
                 let formData = {};
                 formData.id = this.id;
@@ -324,7 +334,7 @@
                         this.imgSrcArr.push(nextArr[i].url);
                         this.idArr.push(nextArr[i].id)
                     }
-                    this.bacImage.backgroundImage = "url(" + this.imgSrcArr[id] + ") "
+                    this.bacImage.backgroundImage = "url(" + this.photoArray[index].url + ") "
                     this.seePhoto = true;
                 }else{
                     if(this.chooseAfterValue.indexOf( id )!=-1){
@@ -366,6 +376,9 @@
     >>>.van-cell {
         padding: 16px 16px;
     }
+    >>>.van-image-preview__index {
+        top: 40px;
+    }
     > > > .van-image-preview__overlay {
         background-color: rgba(0, 0, 0, 1);
     }
@@ -398,40 +411,41 @@
         height: 100%;
     }
     .edit-title1 {
-        height: 50px;
+        height: 80px;
     }
     .edit-title {
-        height: 50px;
+        height: 80px;
         width: 100%;
         font-size: 18px;
         position: fixed;
         top: 0;
         z-index: 999;
-        background-color: #fff;
+        background-color: #1a497d;
         .back-btn {
             width: 100px;
             height: 50px;
             i {
                 font-size: 26px;
-                color: #000;
+                color: #fff;
                 position: absolute;
-                top: 15px;
+                top: 35px;
                 left: 13px;
             }
             span {
                 position: absolute;
-                top: 11px;
+                bottom: 15px;
                 left: 34px;
+                color: #fff;
             }
         }
 
         .choose-all {
             position: absolute;
             right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
+            bottom: 20px;
             font-size: 16px;
             color: #444;
+            color: #fff;
         }
 
     }
@@ -448,21 +462,21 @@
             filter: brightness(0.85);
         }
         .bgc {
-            background-color: #fff;
+            background-color: #1a497d;
         }
         .isBlack {
-            color: #323233!important;
+            color: #fff!important;
         }
         .detail-header {
             transition: all 0.3s;
             position: fixed;
             z-index: 999;
             top: 0;
-            height: 56px;
+            height: 80px;
             width: 100%;
             .back-btn {
                 position: absolute;
-                top: 12px;
+                top: 32px;
                 left: 12px;
                 color: #fff;
                 width: 60px;
@@ -474,17 +488,17 @@
             }
             .menu-btn {
                 position: absolute;
-                top: 20px;
+                top: 40px;
                 right: 15px;
                 font-size: 20px;
                 color: #fff;
             }
             .up-btn-bgc {
                 position: absolute;
-                top: 18px;
+                top: 38px;
                 right: 65px;
                 font-size: 24px;
-                color: #000;
+                color: #fff;
             }
         }
 

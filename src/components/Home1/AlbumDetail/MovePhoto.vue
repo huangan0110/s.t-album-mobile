@@ -91,12 +91,11 @@
 <style scoped lang="scss">
     .move-photo {
         .move-header {
-            height: 50px;
+            height: 80px;
             width: 100%;
             position: fixed;
-            background-color: pink;
             font-size: 18px;
-            background-color: #fff;
+            background-color: #1a497d;
             z-index: 999;
             border-bottom: 0.5px solid #eee;
 
@@ -106,9 +105,9 @@
 
                 i {
                     font-size: 26px;
-                    color: #000;
+                    color: #fff;
                     position: absolute;
-                    top: 13px;
+                    top: 40px;
                     left: 13px;
                 }
             }
@@ -117,12 +116,13 @@
                 position: absolute;
                 left: 50%;
                 transform: translateX(-50%);
-                top: 14px;
+                bottom: 15px;
+                color: #fff;
             }
         }
 
         .move-header1 {
-            height: 50px;
+            height: 80px;
             width: 100%;
         }
 

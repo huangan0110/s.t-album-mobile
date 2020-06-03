@@ -4,7 +4,7 @@
             <span class="title">精选</span>
 <!--            <i class="clearmsg iconfont albumsousuo4" @click="$router.push('/find')"></i>-->
         </div>
-        <div style="height:70px;width:100%;background-color:#fff;z-index: 999999"></div>
+        <div style="height:80px;width:100%;background-color:#fff;z-index: 999999"></div>
         <div class="content" >
             <div v-for="(item,index) in shareData">
                 <FeaturedCard
@@ -25,6 +25,9 @@
         </div>
         <div class="detail-bottom" v-show="!noPic">
             <span>&nbsp;<van-loading color="#1989fa" /> 加载中...</span>
+        </div>
+        <div class="detail-bottom" v-show="noPic">
+            <span>&nbsp;暂无更多</span>
         </div>
         <div style="height: 50px"></div>
     </div>
@@ -150,21 +153,20 @@ export default {
     // height: 100%;
     position: relative;
     .home-header {
-        height: 70px;
+        height: 80px;
         width: 100%;
         position: fixed;
         top: 0px;
         z-index: 9;
-        background-color: #fff;
+        background-color: #1a497d;
         border-bottom: 0.5px solid #cccccc;
         .title {
             position: absolute;
-            top: 50%;
+            bottom: 15px;
             left: 20px;
-            transform: translateY(-50%);
             font-size: 18px;
             font-weight: 500;
-            color: #555;
+            color: #fff;
         }
         .clearmsg {
             position: absolute;
@@ -178,8 +180,7 @@ export default {
     }
 
     .content {
-        margin-bottom: 60px;
-
+        margin-bottom: 20px;
     }
 }
 </style>

@@ -61,25 +61,24 @@
 <style scoped lang="scss">
 .change-bg {
     .change-bg-header {
-        height: 50px;
+        height: 80px;
         width: 100%;
         border-bottom: 0.5px solid #eee;
         position: fixed;
         top: 0;
-        line-height: 52px;
-        color: #666;
+        color: #fff;
         z-index: 999;
-        background-color: #fff;
+        background-color: #1a497d;
         i {
             font-size: 26px;
             position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
+            bottom: 15px;
             left: 15px;
         }
         span {
             position: absolute;
             left: 60px;
+            bottom: 20px;
         }
     }
     .bg-header {

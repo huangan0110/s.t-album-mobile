@@ -4,7 +4,7 @@
             <span class="title">消息</span>
             <span class="clearmsg" @click="clearMsg">清除通知</span>
         </div>
-        <div style="height:70px;" v-if="isLogin"></div>
+        <div style="height:80px;" v-if="isLogin"></div>
         <div class="notice-content" v-if="isLogin">
 
             <div
@@ -52,9 +52,13 @@
                 <MsgCard :msgData="item" :isComment="true"></MsgCard>
             </div>
         </div>
-<!--        <div v-if="isLogin">-->
-<!--            暂无更多-->
-<!--        </div>-->
+        <br>
+        <div v-if="isLogin" style="text-align: center;font-size: 12px;color: #888888" v-show="!isData">
+            暂无更多
+        </div>
+        <br>
+        <van-loading size="24px" color="#1989fa" v-show="isData">加载中...</van-loading>
+
         <div style="height: 70px"></div>
         <div v-if="!isLogin" class="noLogin">
             <van-button type="primary" size="normal" @click="$router.push('email-login')">登录</van-button>
@@ -74,7 +78,8 @@ export default {
         return {
             touchIndex:0,
             isLogin:false,
-            msgData:[]
+            msgData:[],
+            isData:false
         };
     },
     mounted() {
@@ -85,7 +90,9 @@ export default {
         }else{
             this.isLogin = true;
         }
+        this.isData = true;
         getAllComment().then(res=>{
+            this.isData = false
             let rows = res.data.object.rows
             for(let i in rows) {
                 this.msgData.push(rows[i])
@@ -124,31 +131,32 @@ export default {
     }
 .notice {
     position: relative;
+    >>>.van-loading {
+        text-align: center;
+    }
     .notice-header {
-        height: 70px;
+        height: 80px;
         width: 100%;
         position: fixed;
         top: 0px;
         z-index: 9;
-        background-color: #fff;
+        background-color: #1a497d;
         border-bottom: 0.5px solid #cccccc;
         .title {
             position: absolute;
-            top: 50%;
+            bottom: 15px;
             left: 20px;
-            transform: translateY(-50%);
             font-size: 18px;
             font-weight: 500;
-            color: #555;
+            color: #fff;
         }
         .clearmsg {
             position: absolute;
-            top: 50%;
+            bottom: 15px;
             right: 20px;
-            transform: translateY(-50%);
             font-size: 12px;
             font-weight: 500;
-            color: #555;
+            color: #fff;
         }
     }
     .notice-content {

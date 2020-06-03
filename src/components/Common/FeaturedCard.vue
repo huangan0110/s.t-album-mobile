@@ -1,5 +1,6 @@
 <template>
     <div class="featured-card">
+
         <div class="header">
             <van-image
                 width="100%"
@@ -14,11 +15,11 @@
             </van-image>
             <span class="user-name">{{userInfo.nickName}}</span>
             <span class="up-time">{{createTime}}</span>
-            <div v-if="isLogin&&!isMine">
-                <div class="attention-btn" @click.stop="clickAttention(1)" v-if="!isAttention">
+            <div v-if="isLogin">
+                <div class="attention-btn" @click.stop="clickAttention(1)" v-show="!isAttention">
                     未关注
                 </div>
-                <div class="attention-btn" @click.stop="clickAttention(2)" v-if="isAttention">
+                <div class="attention-btn" @click.stop="clickAttention(2)" v-show="isAttention">
                     已关注
                 </div>
             </div>
@@ -41,10 +42,10 @@
                 </van-image>
             </div>
             <div class="img-box" v-if="imageList1.length>1">
-                <img :src="imageList1[1].url" alt="">
+                <img :src="url2" alt="">
             </div>
             <div class="img-box" v-if="imageList1.length>2">
-                <img :src="imageList1[2].url" alt="">
+                <img :src="url3" alt="">
                 <div class="more-pic" v-if="imageList1.length>3">
                     {{length}}图
                 </div>
@@ -125,10 +126,6 @@
                 type: Boolean,
                 default: false
             },
-            isMine: {
-                type: Boolean,
-                default: false
-            },
             delShared: {
                 type: Function,
                 default: null
@@ -139,10 +136,19 @@
                 // showMoreOption:true，
                 imageList1:[],
                 isLogin:false,
-                length:""
+                length:"",
+                url1:"",
+                url2:"",
+                url3:"",
+                isMine:false
             }
         },
         mounted() {
+            if(localStorage.getItem('access_token')){
+                this.isLogin = true
+            }else{
+                this.isLogin = false;
+            }
             this.length = this.imageList.length;
             if (this.imageList.length == 0) {
                 this.imageList1[0] = {
@@ -181,11 +187,12 @@
             }else{
                 this.imageList1 = this.imageList;
             }
-            if(localStorage.getItem('access_token')){
-                this.isLogin = true
-            }else{
-                this.isLogin = false;
-            }
+            let data = this.imageList1;
+
+            this.url1 = data[0].url;
+            this.url2 = data[1].url;
+            this.url3 = data[2].url;
+
         },
         created() {
 
@@ -242,15 +249,13 @@
 
                 let url ="";
                 let method = ""
-                console.log(type)
                 if(type == '1') {  //关注
                     url = '/user/attention/add';
                     method = 'post'
                 }else{
                     url='/user/attention/delete';
-                    method:'delete'
+                    method='delete'
                 }
-                debugger;
                 setAttention(this.userInfo.id,url,method).then(res=>{
                     if(res.data.success) {
                         this.isAttention = true;
@@ -310,9 +315,8 @@
         background-color: #fff;
 
         .header {
-            height: 75px;
             position: relative;
-
+            padding-bottom: 20px;
             .van-image {
                 width: 40px !important;
                 height: 40px;
@@ -360,10 +364,11 @@
             }
 
             .desc {
-                position: absolute;
+                position: relative;
                 left: 0px;
-                bottom: 10px;
                 font-size: 13px;
+                top: 10px;
+                display: block;
             }
 
             .del {

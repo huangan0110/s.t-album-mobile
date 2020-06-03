@@ -191,10 +191,10 @@
     width: 100%;
     background-color: #eee;
     .edit-header {
-        height: 50px;
+        height: 80px;
         width: 100%;
         position: relative;
-        background-color: #fff;
+        background-color: #1a497d;
         text-align: center;
         border-bottom: 0.5px solid #eee;
 
@@ -205,8 +205,8 @@
             i {
                 font-size: 26px;
                 position: absolute;
-                top: 50%;
-                transform: translateY(-50%);
+                bottom: 15px;
+                color: #ffffff;
             }
 
             i {
@@ -224,14 +224,16 @@
             font-size: 16px;
             left: 50%;
             transform: translateX(-50%);
-            top: 12px;
+            top: 38px;
+            color: #ffffff;
         }
 
         .edit-save {
             position: absolute;
             font-size: 16px;
             right: 16px;
-            top: 14px;
+            bottom: 22px;
+            color: #ffffff;
         }
     }
     .edit-content {

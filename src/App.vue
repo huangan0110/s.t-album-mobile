@@ -1,12 +1,9 @@
 <template>
     <div id="app">
-        <dvi style="height: 20px;background-color:#fff;"></dvi>
-        <transition :name="transitionName">
+        <transition :name="transitionName" @before-enter="beforeEnter" @enter="enter" @after-enter="afterEnter">
             <router-view class="child-view"/>
         </transition>
-        <div style="position: absolute">
-            <Tabbar v-show="this.$route.meta.showTabbar" class="test"></Tabbar>
-        </div>
+        <Tabbar v-show="this.$route.meta.showTabbar" :class="{isTransition:isTransition}"></Tabbar>
     </div>
 </template>
 
@@ -21,6 +18,7 @@
         data() {
             return {
                 transitionName: "slide-right",
+                isTransition:false
             }
         },
         watch: {
@@ -39,6 +37,14 @@
                 localStorage.setItem('bgIndex', '0');
             }
             localStorage.setItem('checkIndex',1)
+        },
+        methods:{
+            beforeEnter() {
+                this.isTransition = true;
+            },
+            afterEnter() {
+                this.isTransition = false;
+            }
         }
     };
 </script>
@@ -49,9 +55,9 @@
     }
 
     .child-view {
-        position: absolute;
-        top: 0;
-        width: 100%;
+        position: absolute!important;
+        top: 0!important;
+        width: 100%!important;
         transition: all 0.2s;
         height: 100%;
     }
@@ -59,17 +65,19 @@
     .slide-left-enter,
     .slide-right-leave-active {
         opacity: 0;
-        -webkit-transform: translate(50%, 0);
-        transform: translate(50%, 0);
+        -webkit-transform: translate(100%, 0);
+        transform: translate(100%, 0);
     }
 
     .slide-right-enter,
     .slide-left-leave-active {
         opacity: 0;
-        -webkit-transform: translate(-50%, 0);
-        transform: translate(-50%, 0);
+        -webkit-transform: translate(-100%, 0);
+        transform: translate(-100%, 0);
     }
 
-    .test {
+    .isTransition {
+        position: absolute!important;
+        bottom: 0!important;
     }
 </style>

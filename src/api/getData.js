@@ -1,5 +1,7 @@
 import request from 'axios'
-request.defaults.baseURL = 'http://39.105.137.236:10000'
+import { Toast } from 'vant';
+import router from '../router/index'
+// request.defaults.baseURL = 'http://39.105.137.236:10000'
 request.interceptors.request.use(function (config) {
     let token = window.localStorage.getItem("access_token")
     if (token) {
@@ -13,6 +15,41 @@ request.interceptors.request.use(function (config) {
     // Do something with request error
     return Promise.reject(error);
 });
+
+request.interceptors.response.use(
+    response => {
+
+        return response
+    },
+    //接口错误状态处理，也就是说无响应时的处理
+    error => {
+        console.log(error)
+        if (error.response) {
+            switch (error.response.status) {
+                case 401:
+                    Toast.fail('身份信息过期,请登录!');
+                    router.replace({
+                        path: '/',
+                    })
+                    localStorage.clear();
+                    break;
+                case 403:
+                    Toast.fail('权限不足!');
+                    break;
+                case 405:
+                    Toast.fail('GG 方向错了!');
+                    break;
+                case 500:
+                    Toast.fail('GG 服务器挂了 o(╥﹏╥)o');
+                    break;
+                case 503:
+                    Toast.fail('GG 服务器挂了 o(╥﹏╥)o');
+                    break;
+                default: break;
+            }
+        }
+        return Promise.reject(error.response) // 返回接口返回的错误信息
+    })
 
 //登录获取Token
 export function getCity() {
@@ -311,7 +348,7 @@ export function setAttention(id,url,method) {
         method: method,
         params:{
             attentionId:id
-        }
+        },
     })
 }
 //获取所有评论

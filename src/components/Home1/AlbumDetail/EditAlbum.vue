@@ -37,11 +37,11 @@
                 title:"",
                 title1:"",
                 id:"",
-                visiblePermissionId:"1",
+                visiblePermissionId:1,
                 option: [
-                    {text: '所有人可见', value: '3'},
-                    {text: '仅粉丝可见', value: '2'},
-                    {text: '仅自己可见', value: '1'}
+                    {text: '所有人可见', value: 3},
+                    {text: '仅粉丝可见', value: 2},
+                    {text: '仅自己可见', value: 1}
                 ],
                 type:'',
             }
@@ -49,6 +49,7 @@
         mounted() {
             if(this.$route.query.visiblePermissionId) {
                 this.visiblePermissionId = this.$route.query.visiblePermissionId
+                debugger;
             }
             this.type = this.$route.query.type;
             this.title = this.$route.query.title
@@ -134,10 +135,11 @@
 <style scoped lang="scss">
     .edit-album {
         .edit-header {
-            height: 50px;
+            height: 80px;
             width: 100%;
             position: relative;
             text-align: center;
+            background-color: #1a497d;
             /*border-bottom: 0.5px solid #eee;*/
             .back-btn {
                 width: 100px;
@@ -145,8 +147,8 @@
                 i {
                     font-size: 26px;
                     position: absolute;
-                    top: 50%;
-                    transform: translateY(-50%);
+                    bottom: 15px;
+                    color: #fff;
                 }
 
                 i {
@@ -164,14 +166,16 @@
                 font-size: 16px;
                 left: 50%;
                 transform: translateX(-50%);
-                top: 12px;
+                bottom: 20px;
+                color: #fff;
             }
 
             .edit-save {
                 position: absolute;
                 font-size: 16px;
                 right: 16px;
-                top: 12px;
+                bottom: 21px;
+                color: #fff;
             }
         }
         .edit-content {

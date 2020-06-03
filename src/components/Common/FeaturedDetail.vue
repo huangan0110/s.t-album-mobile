@@ -4,7 +4,7 @@
             <i class="iconfont albumzuojiantou" @click="$router.push('/featured')"></i>
             <span>精选</span>
         </div>
-        <div style="height: 50px"></div>
+        <div style="height: 80px"></div>
         <div class="featured-detail-content">
             <div class="" ref="fDetail">
                 <div class="user-cell" @click="viewOther">
@@ -148,7 +148,7 @@
 </template>
 
 <script>
-    import {clickLike, getAttention, getComment, setComment,getLike} from "../../api/getData";
+    import {clickLike, getAttention, getComment, setComment,getLike,setAttention} from "../../api/getData";
 
     export default {
         name: "FeaturedDetail",
@@ -228,6 +228,7 @@
         },
         methods: {
             viewOther(){
+                this.allData.userInfo.isAttention = this.isAttention;
                 console.log(this.allData.userInfo.id)
                 this.$router.push({
                     path:'/other',
@@ -246,10 +247,9 @@
                     method = 'post'
                 }else{
                     url='/user/attention/delete';
-                    method:'delete'
+                    method='delete'
                 }
-                debugger;
-                setAttention(this.userInfo.id,url,method).then(res=>{
+                setAttention(this.allData.userInfo.id,url,method).then(res=>{
                     if(res.data.success) {
                         this.isAttention = true;
                         this.$toast({
@@ -298,7 +298,7 @@
                     this.imgSrcArr.push(nextArr[i].url);
                     this.idArr.push(nextArr[i].id)
                 }
-                this.bacImage.backgroundImage = "url(" + this.imgSrcArr[id] + ") "
+                this.bacImage.backgroundImage = "url(" + this.photoArray[index].url + ") "
                 this.seePhoto = true;
             },
             onChange(index) {
@@ -367,6 +367,12 @@
         .van-image-preview__index {
             z-index: 999999;
         }
+        >>>.van-image-preview__close-icon--top-right {
+            top: 40px;
+        }
+        >>>.van-image-preview__index {
+            top: 40px;
+        }
         position: absolute;
 
         > > > .van-image-preview__overlay {
@@ -398,27 +404,26 @@
         }
 
         .featured-detail-header {
-            height: 50px;
+            height: 80px;
             width: 100%;
             border-bottom: 0.5px solid #eee;
             position: fixed;
             top: 0;
-            line-height: 50px;
-            color: #666;
+            color: #fff;
             z-index: 999;
-            background-color: #fff;
+            background-color: #1a497d;
 
             i {
                 font-size: 26px;
                 position: absolute;
-                top: 50%;
-                transform: translateY(-50%);
+                bottom: 15px;
                 left: 15px;
             }
 
             span {
                 position: absolute;
                 left: 60px;
+                bottom: 20px;
             }
         }
 

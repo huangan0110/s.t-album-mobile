@@ -18,6 +18,12 @@
                 </li>
             </ul>
         </div>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <van-loading size="24px" color="#1989fa" v-show="isData">加载中...</van-loading>
         <div class="home-bottom" v-if="albumData.length!=0">
         </div>
         <div v-if="!isLogin" class="noLogin">
@@ -41,7 +47,8 @@
         data() {
             return {
                 albumData:[],
-                isLogin:false
+                isLogin:false,
+                isData:false
             }
         },
         mounted() {
@@ -51,7 +58,9 @@
             }else{
                 this.isLogin = true;
             }
+            this.isData = true;
             seeAlbum().then(res => {
+                this.isData = false
                 this.albumData = res.data.object.rows;
             })
         },
@@ -81,24 +90,26 @@
         }
     }
     .home {
+        >>>.van-loading {
+            text-align: center;
+        }
         .home-header {
-            height: 50px;
+            height: 80px;
             width: 100%;
             border-bottom: 1px solid #eee;
             box-shadow: 0px 8px 25px -22px #5e5e5e;
             position: fixed;
-            top: 20px;
+            top: 0px;
             z-index: 9;
-            background-color: #fff;
+            background-color: #1a497d;
 
             span {
                 position: absolute;
-                top: 50%;
+                bottom: 15px;
                 left: 20px;
-                transform: translateY(-50%);
                 font-size: 18px;
                 font-weight: 500;
-                color: #555;
+                color: #fff;
             }
 
             i {
@@ -111,7 +122,7 @@
             }
         }
         .home-content {
-            margin-top: 80px;
+            margin-top: 90px;
             ul {
                 list-style: none;
             }

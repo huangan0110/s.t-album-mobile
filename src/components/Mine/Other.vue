@@ -21,10 +21,10 @@
                         </template>
                     </van-image>
                 </div>
-                <div class="editinfo" @click="attention" v-if="false">
+                <div class="editinfo" @click="clickAttention(1)" v-if="isAttention">
                     已关注
                 </div>
-                <div class="editinfo" @click="notattention">
+                <div class="editinfo" @click="clickAttention(2)" v-if="!isAttention">
                     点击关注
                 </div>
             </div>
@@ -36,19 +36,21 @@
                 <div class="actice">刚刚活跃</div>
             </div>
         </div>
-        <div class="mine-content"  >
+        <div class="mine-content">
             <van-tabs v-model="active" animated title-active-color="#008B45" sticky offset-top="60" lazy-render>
                 <van-tab title="相册">
                     <div class="album-content clearfix">
                         <ul>
                             <li v-for="(item,index) in albumData" :key="index">
-                                <album-card :imgSrc="item.background" :title="item.name" :id="item.id" :photoNum="item.imageNum" :visiblePermissionId="item.visiblePermissionId"></album-card>
+                                <album-card :imgSrc="item.background" :title="item.name" :id="item.id"
+                                            :photoNum="item.imageNum"
+                                            :visiblePermissionId="item.visiblePermissionId"></album-card>
                             </li>
                         </ul>
                     </div>
                 </van-tab>
                 <van-tab title="精选">
-                    <div v-for="(item,index) in featuredData" >
+                    <div v-for="(item,index) in featuredData">
                         <FeaturedCard
                             :imageList="item.imageList"
                             :browseNum="item.browseNum"
@@ -59,17 +61,19 @@
                             :likeNum="item.likeNum"
                             :createTime="item.createTime"
                             :isDelete="false"
-                            :isAttention = "item.isAttention"
-                            :isLiked = "item.isLiked"
+                            :isAttention="item.isAttention"
+                            :isLiked="item.isLiked"
                             :isMine="true"
                             :delShared="delShared"
                         ></FeaturedCard>
                     </div>
+                    <div
+                        style="text-align: center;background-color:#eee;z-index: 999999;height: 40px;line-height: 40px;font-size: 12px;color: #666666">
+                        ~~~~ 已加载全部 ~~~~
+                    </div>
                 </van-tab>
             </van-tabs>
         </div>
-        <div style="height: 50px"></div>
-
     </div>
 </template>
 
@@ -79,8 +83,8 @@
     import FeaturedCard from "../Common/FeaturedCard";
     import Attention from "./components/Attention";
     import Fans from "./components/Fans";
-    import {seeAlbum,getMyInfo,logout} from "../../api/getData";
-    import {seeOtherAlbum,getFeatured} from "../../api/getData";
+    import {seeAlbum, getMyInfo, logout} from "../../api/getData";
+    import {seeOtherAlbum, getFeatured, setAttention} from "../../api/getData";
 
     var el = document.getElementsByClassName('van-tabs__wrap')[0];
 
@@ -98,30 +102,32 @@
                 contentScrollTop: true,
                 isFixed: false,
                 albumData: [],
-                userInfo:{},
-                featuredData:[]
+                userInfo: {},
+                featuredData: [],
+                isAttention: false
             }
         },
         mounted() {
+
             this.userInfo = this.$route.query.data;
-            console.log(this.userInfo)
+            this.isAttention = this.userInfo.isAttention;
             window.addEventListener('scroll', this.getScrollTop);
             let that = this;
-            seeOtherAlbum(this.userInfo.id).then(res=>{
+            seeOtherAlbum(this.userInfo.id).then(res => {
                 that.albumData = res.data.object.rows;
             })
             let fromData = {};
-            if(localStorage.getItem("access_token")) {
+            if (localStorage.getItem("access_token")) {
                 fromData.url = '/album/share/pageShare'
                 fromData.mark = 2
-                fromData.otherId=this.userInfo.id;
-            }else{
+                fromData.otherId = this.userInfo.id;
+            } else {
                 fromData.url = '/album/public/pageShare'
             }
-            getFeatured(fromData).then(res=>{
-                if(res.data.success) {
+            getFeatured(fromData).then(res => {
+                if (res.data.success) {
                     let rows = res.data.object.rows;
-                    for(let i=0;i<rows.length;i++) {
+                    for (let i = 0; i < rows.length; i++) {
                         let row = rows[i];
                         that.featuredData.push(row);
                     }
@@ -129,10 +135,41 @@
             })
         },
         methods: {
-            attention() {},
-            notattention(){},
+            attention() {
+            },
+            notattention() {
+            },
             getMyShared() {
 
+            },
+            clickAttention(type) {
+
+                let url = "";
+                let method = ""
+                let msg = ""
+                if (type == '2') {  //关注
+                    url = '/user/attention/add';
+                    method = 'post';
+                    msg = "添加关注成功"
+                } else {
+                    url = '/user/attention/delete';
+                    method = 'delete';
+                    msg = "告辞"
+
+                }
+                setAttention(this.userInfo.id, url, method).then(res => {
+                    if (res.data.success) {
+                        if(type == '2') {
+                            this.isAttention = true;
+                        }else{
+                            this.isAttention = false;
+                        }
+                        this.$toast({
+                            message: msg,
+                            position: "bottom"
+                        });
+                    }
+                })
             },
             getScrollTop() {
                 this.showOption = false;
@@ -175,15 +212,21 @@
         position: absolute;
         width: 100%;
         height: 100%;
-        >>>.van-button {
+
+        > > > .van-button {
             position: absolute;
             left: 50%;
             transform: translateX(-50%);
             top: 300px;
         }
     }
+
     > > > .van-overlay {
         z-index: 1005 !important;
+    }
+
+    .van-tab__pane, .van-tab__pane-wrapper {
+        background-color: #eee;
     }
 
     .mine {
@@ -219,7 +262,7 @@
                 width: 100%;
                 position: fixed;
                 z-index: 99;
-                top: 0;
+                top: 16px;
 
                 i {
                     font-size: 20px;
@@ -258,15 +301,15 @@
                 position: absolute;
                 width: 100%;
                 height: 80px;
-                top: 70px;
+                top: 80px;
 
                 .bg-scroll {
                     position: fixed;
                 }
 
                 .avatar {
-                    height: 80px;
-                    width: 80px;
+                    height: 70px;
+                    width: 70px;
                     border-radius: 50%;
                     position: absolute;
                     overflow: hidden;
@@ -277,6 +320,7 @@
                         height: 80px;
                         object-fit: cover;
                     }
+
                     .van-image {
                         height: 100%;
                     }

@@ -1,11 +1,12 @@
 <template>
     <div class="mine">
+<!--        <van-loading size="24px" color="#1989fa" v-show="isData">加载中...</van-loading>-->
         <div class="mine-bg" v-show="contentScrollTop">
             <img :src="mineBgSrc" alt="" class="user-bg" :class="{'bg-scroll':isFixed}">
             <div class="mine-header" :class="{'mine-header-scroll':isFixed}">
 
                 <img :src="userInfo.avatar" alt="" v-show="isFixed">
-                <i class="iconfont albumyoucecaidan pup-i" @click="showOptionPup"></i>
+                <i class="iconfont albumyoucecaidan pup-i" @click="showOptionPup" :class="{'pup-scroll':isFixed}"></i>
                 <span v-show="isFixed">{{userInfo.nickName}}</span>
             </div>
             <div class="avartar-editinfo">
@@ -67,22 +68,23 @@
                 <van-tab title="关注" >
                     <div v-for="(item,index) in attentionData">
                         <AttentionCell
-                            :nickName="item.nickName"
-                            :id="item.userResource.id"
-                            :fanNum="item.userResource.fanNum"
-                            :attentionNum="item.userResource.attentionNum"
-                            :avatar="item.avatar"
+                            :nickName="item.attention.nickName"
+                            :id="item.id"
+                            :fanNum="item.attention.userResource.fanNum"
+                            :attentionNum="item.attention.userResource.attentionNum"
+                            :avatar="item.attention.avatar"
+                            :isAttention="item.isAttention"
                         ></AttentionCell>
                     </div>
                 </van-tab>
                 <van-tab title="粉丝">
                     <div v-for="(item,index) in fansData">
                         <AttentionCell
-                            :nickName="item.nickName"
-                            :id="item.userResource.id"
-                            :fanNum="item.userResource.fanNum"
-                            :attentionNum="item.userResource.attentionNum"
-                            :avatar="item.avatar"
+                            :nickName="item.fan.nickName"
+                            :id="item.id"
+                            :fanNum="item.fan.userResource.fanNum"
+                            :attentionNum="item.fan.userResource.attentionNum"
+                            :avatar="item.fan.avatar"
                         ></AttentionCell>
                     </div>
                 </van-tab>
@@ -138,7 +140,9 @@
                 userInfo:[],
                 featuredData:[],
                 attentionData:[],
-                fansData:[]
+                fansData:[],
+                isData:false,
+                fansIds:[]
             }
         },
         mounted() {
@@ -149,7 +153,7 @@
             } else {
                 this.isLogin = true;
             }
-            window.addEventListener('scroll', this.getScrollTop);
+            this.isData = true;
             seeAlbum().then(res => {
                 this.albumData = res.data.object.rows;
             })
@@ -162,24 +166,26 @@
                 if(res.data.success) {
                     let rows = res.data.object.rows;
                     for(let i=0;i<rows.length;i++) {
-                        console.log(rows[i].attention)
                         if(rows[i].attention) {
-                            this.attentionData.push(rows[i].attention)
+                            this.attentionData.push(rows[i])
                         }
                     }
                 }
             })
+            let that = this;
             getFans().then(res=>{
                 if(res.data.success) {
                     let rows = res.data.object.rows;
                     for(let i=0;i<rows.length;i++) {
                         if(rows[i].fan) {
-                            this.fansData.push(rows[i].fan)
+                            that.fansData.push(rows[i]);
                         }
                     }
                 }
+                this.isData = false
             })
             this.getMyShared()
+            window.addEventListener('scroll', this.getScrollTop);
         },
         beforeDestroy(){
             window.removeEventListener("scroll", this.getScrollTop);
@@ -359,20 +365,25 @@
 
                 .pup-i {
                     right: 16px;
+                    transition: all 0.3s;
                 }
-
+                .pup-scroll {
+                    top: 20px;
+                }
                 img {
                     width: 35px;
                     height: 35px;
                     border-radius: 50%;
                     top: 15px;
-                    left: 55px;
+                    left: 25px;
                     position: absolute;
+                    opacity: 1;
+                    transition: all 0.2s;
                 }
 
                 span {
                     position: absolute;
-                    left: 107px;
+                    left: 77px;
                     top: 22px;
                     font-size: 14px;
                     color: #ffffff;
@@ -416,7 +427,7 @@
                     background-color: rgba(255, 255, 255, 0.15);
                     top: 50%;
                     transform: translateY(-50%);
-                    right: 20px;
+                    right: 30px;
                 }
 
                 .editinfo:active {
